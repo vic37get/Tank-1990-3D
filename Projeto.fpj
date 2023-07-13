@@ -15,7 +15,7 @@
 		<ProductVersion Value="1.0.0.0"/>
 		<AutoIncrementBuild Value="No"/>
 	</VersionInfo>
-	<Libs Value="-mwindows -static -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32"/>
+	<Libs Value="-static -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32"/>
 	<Flags Value="-DGLUT_STATIC"/>
 	<Target Value="Projeto.exe"/>
 	<CommandLine Value=""/>
@@ -27,11 +27,16 @@
 	<EnableTheme Value="Yes"/>
 	<RequiresAdmin Value="No"/>
 	<CompilerType Value="CPP"/>
-	<AppType Value="GUI"/>
+	<AppType Value="CONSOLE"/>
 	<Files>
+		<File Name="jogador.cpp"/>
+		<File Name="inimigo.cpp"/>
 		<File Name="main.cpp"/>
 		<File Name="tank.cpp"/>
 		<File Name="audio.cpp"/>
+		<File Name="projetil.cpp"/>
+		<File Name="mapa.h"/>
+		<File Name="bloco.h"/>
 	</Files>
 	<AppIcon>
 		0000010001003030000001002000A82500001600000028000000300000006000

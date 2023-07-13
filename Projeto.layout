@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout>
+	<Files>
+		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="37">
+			<Cursor Line="42" Column="22"/>
+		</File>
+		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="4">
+			<Cursor Line="33" Column="5"/>
+		</File>
+		<File Name="bloco.h" Top="Yes" Tabpos="3" TopLine="36">
+			<Cursor Line="50" Column="36"/>
+		</File>
+	</Files>
+</Layout>
