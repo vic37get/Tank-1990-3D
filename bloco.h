@@ -16,75 +16,75 @@
 */
 
 
-void parede(int h, int w, int x, int y, int j, int i){
+void parede(int i, int j){
 	glPushMatrix();
-		glColor3f(0.2, 0.2, 0.2);
-		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glColor3f(0.3, 0.3, 0.3);
+		glScalef (1.0, 1.0, 0.8);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);	
     glPopMatrix();
 }
 
-void tijolo(int h, int w, int x, int y, int j, int i){
+void tijolo(int i, int j){
 	glPushMatrix();
 		glColor3f(1.0, 0.5, 0.0);
-		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (1.0, 1.0, 0.7);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
 
-void metal(int h, int w, int x, int y, int j, int i){
+void metal(int i, int j){
 	glPushMatrix();
-		glColor3f(0.8, 0.8, 0.8);
-		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glColor3f(0.9, 0.9, 0.9);
+		glScalef (1.0, 1.0, 0.7);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
 
-void arbusto(int h, int w, int x, int y, int j, int i){
+void arbusto(int i, int j){
 	glPushMatrix();
-		glColor3f(0.5, 1.0, 0.3);
-		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glColor3f(0.0, 0.7, 0.0);
+		glScalef (1.0, 1.0, 0.7);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
 
 //Implementar o mais parecido possivel.
-void aguia(int h, int w, int x, int y, int j, int i){
+void aguia(int i, int j){
 	glPushMatrix();
 		glColor3f(0.6, 0.6, 0.6);
 		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
 
-void chao(int h, int w, int x, int y, int j, int i){
+void chao(int i, int j){
 	glPushMatrix();
-		glColor3f(0.0, 0.0, 0.0);
+		glColor3f(0.1, 0.1, 0.1);
 		glScalef (1.0, 1.0, 0.1);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);	
     glPopMatrix();
 }
 
-void agua(int h, int w, int x, int y, int j, int i){
+void agua(int i, int j){
 	glPushMatrix();
-		glColor3f(0.0, 0.3, 1.0);
+		glColor3f(0.0, 0.5, 1.0);
 		glScalef (1.0, 1.0, 0.1);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
 
-void pista(int h, int w, int x, int y, int j, int i){
+void pista(int i, int j){
 	glPushMatrix();
 		glColor3f(0.7, 0.7, 0.7);
 		glScalef (1.0, 1.0, 0.1);
-		glTranslatef (j*h+x, i*w+y, 0.5);
+		glTranslatef (j*1, i*1, 0.5);
 		glutSolidCube(1.0);
     glPopMatrix();
 }

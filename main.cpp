@@ -22,9 +22,19 @@
 
 
 #include "mapa.h"
+#include "jogador.h"
+#include "inimigo.h"
 
 // Variaveis Globais
 int h, w = 0;
+
+//Instancia de Jogador.
+Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0};
+
+//Instancia de Inimigo.
+Inimigo inimigo1 = {12, 13, 0.08, 0, 1.0, 0.0, 0.0};
+Inimigo inimigo2 = {12, 6, 0.08, 0, 1.0, 0.0, 1.0};
+Inimigo inimigo3 = {12, 1, 0.08, 0, 0.0, 1.0, 1.0};
 
 //CallBacks das funções.
 void init(void);
@@ -40,7 +50,7 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    criaMapa();    
+    criaMapa(jogador, inimigo1, inimigo2, inimigo3);    
     glutSwapBuffers();
 }
 
@@ -64,12 +74,38 @@ void reshape (int w, int h){
 
 void keyboard (unsigned char key, int x, int y){
 	switch (key) {
-		case GLUT_KEY_UP: h = (h + 5) % 360; break; // sentido horario
-		case GLUT_KEY_DOWN: h = (h - 5) % 360; break; // sentido anti-horario
-		case GLUT_KEY_RIGHT: w = (w + 5) % 360; break; // sentido horario
-		case GLUT_KEY_LEFT: w = (w - 5) % 360; break; // sentido anti-horario
+		//Atirar
+		case 'q':
+			break;
+		case 'Q':
+			break;
 	}
     glutPostRedisplay();
+}
+
+void specialKeyboard(int key, int x, int y){
+	switch(key){
+		case GLUT_KEY_UP:
+			jogador.x += jogador.velocidade;
+			jogador.direcaoCano = 0;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_DOWN:
+			jogador.x -= jogador.velocidade;
+			jogador.direcaoCano = 10;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_RIGHT:
+			jogador.y += jogador.velocidade;
+			jogador.direcaoCano = 180;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_LEFT:
+			jogador.y -= jogador.velocidade;
+			jogador.direcaoCano = -90;
+			glutPostRedisplay();
+			break;
+	}
 }
 
 int main(int argc, char** argv){
@@ -84,6 +120,7 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialKeyboard);
     glutMainLoop();
     
 	return EXIT_SUCCESS;

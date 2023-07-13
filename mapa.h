@@ -1,7 +1,17 @@
 //Implementação do mapa.
+
+#ifndef MAPA_H
+#define MAPA_H
+#endif
+
 #include <cstdio>
 #include "bloco.h"
+#include "tank.h"
+#include "jogador.h"
+#include "inimigo.h"
 #define tamMapa 15
+
+
 
 /*
 - Detalhamento do Mapa
@@ -32,43 +42,46 @@ int mapa[tamMapa][tamMapa] = {	{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}
 }; 	
 
-void criaMapa(){
-	GLfloat w = 1.0, h = 1.0, x = 0, y = 0;
+void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimigo3){
 	for (int i = 0; i < tamMapa; i++){
 		for (int j = 0; j < tamMapa; j++){
 			if (mapa[i][j] == 0){
 				//Desenha o Chão.
-				chao(h, w, x, y, j, i);
+				chao(i, j);
 			}
 			else if(mapa[i][j] == 1){
 				//Desenha a Água.
-				agua(h, w, x, y, j, i);
+				agua(i, j);
 			}
 			else if(mapa[i][j] == 2){
 				//Desenha o Tijolo.
-				tijolo(h, w, x, y, j, i);
+				tijolo(i, j);
 			}
 			else if(mapa[i][j] == 3){
 				//Desenha o Metal.
-				metal(h, w, x, y, j, i);
+				metal(i, j);
 			}
 			else if(mapa[i][j] == 4){
 				//Desenha o Arbusto.
-				arbusto(h, w, x, y, j, i);
+				arbusto(i, j);
 			}
 			else if(mapa[i][j] == 5){
 				//Desenha o Pista.
-				pista(h, w, x, y, j, i);
+				pista(i, j);
 			}
 			else if(mapa[i][j] == 6){
 				//Desenha o Aguia.
-				aguia(h, w, x, y, j, i);
+				aguia(i, j);
 			}
 			else if(mapa[i][j] == 7){
 				//Tijolos Laterais.
-				parede(h, w, x, y, j, i);
+				parede(i, j);
 			}
 		}
 	}
+	desenhaTank(jogador.x, jogador.y, jogador.direcaoCano, jogador.R, jogador.G, jogador.B);
 	
+	desenhaTank(inimigo1.x, inimigo1.y, inimigo1.direcaoCano, inimigo1.R, inimigo1.G, inimigo1.B);
+	desenhaTank(inimigo2.x, inimigo2.y, inimigo2.direcaoCano, inimigo2.R, inimigo2.G, inimigo2.B);
+	desenhaTank(inimigo3.x, inimigo3.y, inimigo3.direcaoCano, inimigo3.R, inimigo3.G, inimigo3.B);
 }
