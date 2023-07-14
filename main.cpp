@@ -24,17 +24,29 @@
 #include "mapa.h"
 #include "jogador.h"
 #include "inimigo.h"
+#include "projetil.h"
 
 // Variaveis Globais
 int h, w = 0;
 
+// Instancia de Jogador.
+// Jogador jogador = {1.5, 5.5, 0.08, 0, 1.0, 1.0, 0.0};
+// 
+// Instancia de Inimigo.
+// Inimigo inimigo1 = {13.0, 13.0, 0.08, 0, 1.0, 0.0, 0.0};
+// Inimigo inimigo2 = {13.0, 6.5, 0.08, 0, 1.0, 0.0, 1.0};
+// Inimigo inimigo3 = {13.0, 1.5, 0.08, 0, 0.0, 1.0, 1.0};
+
 //Instancia de Jogador.
-Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0};
+
+//X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo.
+Projetil projetilJogador  = {1, 4, 5};
+Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, true, projetilJogador};
 
 //Instancia de Inimigo.
-Inimigo inimigo1 = {12, 13, 0.08, 0, 1.0, 0.0, 0.0};
-Inimigo inimigo2 = {12, 6, 0.08, 0, 1.0, 0.0, 1.0};
-Inimigo inimigo3 = {12, 1, 0.08, 0, 0.0, 1.0, 1.0};
+Inimigo inimigo1 = {13, 13, 0.08, 0, 1.0, 0.0, 0.0};
+Inimigo inimigo2 = {13, 6, 0.08, 0, 1.0, 0.0, 1.0};
+Inimigo inimigo3 = {13, 1, 0.08, 0, 0.0, 1.0, 1.0};
 
 //CallBacks das funções.
 void init(void);
@@ -50,7 +62,7 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    criaMapa(jogador, inimigo1, inimigo2, inimigo3);    
+    criaMapa(jogador, inimigo1, inimigo2, inimigo3, projetilJogador);    
     glutSwapBuffers();
 }
 
@@ -64,10 +76,10 @@ void reshape (int w, int h){
 
     // Define a forma do volume de visualizacao para termos
     // uma projecao perspectiva (3D).
-    gluPerspective(50, (float)w/(float)h, 1.0, 80.0); //(angulo, aspecto, ponto_proximo, ponto distante)
-    gluLookAt(6.0,-6.0,13.0, 	// posição da câmera (olho) 
-			  6.0,6.0,0.0, 	// centro da cena
-			  0.0,1.0,0.0); // sentido ou orientacao da camera (de cabeca para cima)
+    gluPerspective(70, (float)w/(float)h, 1.0, 80.0); //(angulo, aspecto, ponto_proximo, ponto distante)
+    gluLookAt(6.0, 6.0, 13.0, 	// posição da câmera (olho) 
+			  6.0, 6.0, 6.0, 	// centro da cena
+			  0.0, 1.0, 0.0); // sentido ou orientacao da camera (de cabeca para cima)
     // muda para o modo GL_MODELVIEW para desenhar na tela
     glMatrixMode (GL_MODELVIEW);
 }
@@ -76,6 +88,9 @@ void keyboard (unsigned char key, int x, int y){
 	switch (key) {
 		//Atirar
 		case 'q':
+			projetilJogador.xOrigem = jogador.x;
+			projetilJogador.yOrigem = jogador.y;
+			projetilJogador.velocidade = 5;
 			break;
 		case 'Q':
 			break;

@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="37">
-			<Cursor Line="42" Column="22"/>
+		<File Name="mapa.h" Top="No" Tabpos="1" TopLine="69">
+			<Cursor Line="99" Column="5"/>
 		</File>
-		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="4">
-			<Cursor Line="33" Column="5"/>
+		<File Name="bloco.h" Top="No" Tabpos="2" TopLine="114">
+			<Cursor Line="151" Column="1"/>
 		</File>
-		<File Name="bloco.h" Top="Yes" Tabpos="3" TopLine="36">
-			<Cursor Line="50" Column="36"/>
+		<File Name="tank.h" Top="No" Tabpos="3" TopLine="1">
+			<Cursor Line="13" Column="18"/>
+		</File>
+		<File Name="main.cpp" Top="No" Tabpos="4" TopLine="57">
+			<Cursor Line="84" Column="16"/>
+		</File>
+		<File Name="inimigo.cpp" Top="Yes" Tabpos="5" TopLine="1">
+			<Cursor Line="1" Column="1"/>
 		</File>
 	</Files>
 </Layout>
