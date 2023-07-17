@@ -41,7 +41,7 @@ int h, w = 0;
 
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo.
 Projetil projetilJogador  = {1, 4, 5};
-Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, true, projetilJogador};
+Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, false};
 
 //Instancia de Inimigo.
 Inimigo inimigo1 = {13, 13, 0.08, 0, 1.0, 0.0, 0.0};
@@ -62,7 +62,10 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    criaMapa(jogador, inimigo1, inimigo2, inimigo3, projetilJogador);    
+    criaMapa(jogador, inimigo1, inimigo2, inimigo3, projetilJogador);
+	if (jogador.projetil.tiro){
+		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem);
+	}    
     glutSwapBuffers();
 }
 
@@ -88,14 +91,27 @@ void keyboard (unsigned char key, int x, int y){
 	switch (key) {
 		//Atirar
 		case 'q':
-			projetilJogador.xOrigem = jogador.x;
-			projetilJogador.yOrigem = jogador.y;
-			projetilJogador.velocidade = 5;
+			jogador.projetil.tiro = true;
+			jogador.projetil.xOrigem = jogador.x;
+			jogador.projetil.yOrigem = jogador.y;
 			break;
 		case 'Q':
 			break;
 	}
     glutPostRedisplay();
+}
+
+void updateTiro(int value) {
+    if (jogador.projetil.tiro) {
+        jogador.projetil.xOrigem += 1.0f;
+
+        if (jogador.projetil.xOrigem > 1.0f) {
+            jogador.projetil.tiro = false;
+        }
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc(16, updateTiro, 0);
 }
 
 void specialKeyboard(int key, int x, int y){
@@ -135,6 +151,7 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
+    glutTimerFunc(0, updateTiro, 0);
     glutSpecialFunc(specialKeyboard);
     glutMainLoop();
     

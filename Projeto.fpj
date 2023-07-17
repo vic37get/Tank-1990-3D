@@ -29,14 +29,14 @@
 	<CompilerType Value="CPP"/>
 	<AppType Value="CONSOLE"/>
 	<Files>
-		<File Name="jogador.cpp"/>
-		<File Name="inimigo.cpp"/>
 		<File Name="main.cpp"/>
-		<File Name="tank.cpp"/>
-		<File Name="audio.cpp"/>
-		<File Name="projetil.cpp"/>
-		<File Name="mapa.h"/>
+		<File Name="projetil.h"/>
+		<File Name="jogador.h"/>
 		<File Name="bloco.h"/>
+		<File Name="inimigo.h"/>
+		<File Name="audio.cpp"/>
+		<File Name="mapa.h"/>
+		<File Name="tank.h"/>
 	</Files>
 	<AppIcon>
 		0000010001003030000001002000A82500001600000028000000300000006000

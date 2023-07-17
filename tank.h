@@ -6,20 +6,20 @@
 void desenhaTank(float i, float j, float direcao, int R, int G, int B){
 	glPushMatrix();
 		glColor3f(R, G, B);
-		glScalef (1.0, 1.0, 0.5);
-		glTranslatef (j*1, i*1, 1.0);
+		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
 		
 		glPushMatrix();
 			glColor3f(R - 0.1, G - 0.1, B - 0.1);
-			glScalef(0.5, 0.5, 1.0);
-			glTranslatef(0, 0.5, 0.25);
+			glTranslatef(0, 0, 0.25);
+			glScalef(0.6, 0.6, 1.0);
 			glutSolidCube(1.0);
         glPopMatrix();
 		
 		glPushMatrix();
-			glScalef (0.3, 1.0, 0.5);
 			glTranslatef(0, 0.5, 0);
+			glScalef (0.3, 1.0, 0.5);
 			glutSolidCube(1.0);
 		glPopMatrix();
     glPopMatrix();

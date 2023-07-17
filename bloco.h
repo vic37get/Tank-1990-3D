@@ -15,86 +15,12 @@
 	- Parede: 7
 */
 
-// void parede(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.3, 0.3, 0.3);
-// 		glScalef (0.5, 0.5, 0.8);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);	
-//     glPopMatrix();
-// }
-// 
-// void tijolo(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(1.0, 0.5, 0.0);
-// 		glScalef (0.5, 0.5, 0.7);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-// 
-// void metal(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.9, 0.9, 0.9);
-// 		glScalef (0.5, 0.5, 0.7);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-// 
-// void arbusto(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.0, 0.7, 0.0);
-// 		glScalef (0.5, 0.5, 0.7);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-// 
-//Implementar o mais parecido possivel.
-// void aguia(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.6, 0.6, 0.6);
-// 		glScalef (0.5, 0.5, 0.5);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-// 
-// void chao(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.1, 0.1, 0.1);
-// 		glScalef (0.5, 0.5, 0.1);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);	
-//     glPopMatrix();
-// }
-// 
-// void agua(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.0, 0.5, 1.0);
-// 		glScalef (0.5, 0.5, 0.1);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-// 
-// void pista(int i, int j){
-// 	glPushMatrix();
-// 		glColor3f(0.7, 0.7, 0.7);
-// 		glScalef (0.5, 0.5, 0.1);
-// 		glTranslatef (j*1, i*1, 0.5);
-// 		glutSolidCube(1.0);
-//     glPopMatrix();
-// }
-
 
 void parede(int i, int j){
 	glPushMatrix();
 		glColor3f(0.3, 0.3, 0.3);
-		//glScalef (1.0, 1.0, 0.8);
-		glScalef (1.0, 1.0, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 1.0);
 		glutSolidCube(1.0);	
     glPopMatrix();
 }
@@ -102,9 +28,8 @@ void parede(int i, int j){
 void tijolo(int i, int j){
 	glPushMatrix();
 		glColor3f(1.0, 0.5, 0.0);
-		//glScalef (1.0, 1.0, 0.7);
-		glScalef (1.0, 1.0, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
@@ -112,9 +37,8 @@ void tijolo(int i, int j){
 void metal(int i, int j){
 	glPushMatrix();
 		glColor3f(0.9, 0.9, 0.9);
-		//glScalef (1.0, 1.0, 0.7);
-		glScalef (1.0, 1.0, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
@@ -122,9 +46,8 @@ void metal(int i, int j){
 void arbusto(int i, int j){
 	glPushMatrix();
 		glColor3f(0.0, 0.7, 0.0);
-		//glScalef (1.0, 1.0, 0.7);
-		glScalef (1.0, 1.0, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
@@ -133,9 +56,8 @@ void arbusto(int i, int j){
 void aguia(int i, int j){
 	glPushMatrix();
 		glColor3f(0.6, 0.6, 0.6);
-		//glScalef (1.0, 1.0, 0.5);
-		glScalef (1.0, 1.0, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
@@ -143,8 +65,8 @@ void aguia(int i, int j){
 void chao(int i, int j){
 	glPushMatrix();
 		glColor3f(0.1, 0.1, 0.1);
-		glScalef (1.0, 1.0, 0.1);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.1);
 		glutSolidCube(1.0);	
     glPopMatrix();
 }
@@ -152,8 +74,8 @@ void chao(int i, int j){
 void agua(int i, int j){
 	glPushMatrix();
 		glColor3f(0.0, 0.5, 1.0);
-		glScalef (1.0, 1.0, 0.1);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.1);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
@@ -161,8 +83,8 @@ void agua(int i, int j){
 void pista(int i, int j){
 	glPushMatrix();
 		glColor3f(0.7, 0.7, 0.7);
-		glScalef (1.0, 1.0, 0.1);
 		glTranslatef (j*1, i*1, 0.5);
+		glScalef (1.0, 1.0, 0.1);
 		glutSolidCube(1.0);
     glPopMatrix();
 }
