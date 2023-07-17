@@ -151,8 +151,31 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
-    glutTimerFunc(0, updateTiro, 0);
+    glutTimerFunc(5, updateTiro, 0);
     glutSpecialFunc(specialKeyboard);
+    
+    GLfloat light_position[] = {-1.0, 1.0, 1.0, 0.0};
+	GLfloat light_color[] = {1.0, 1.0, 1.0, 0.0};
+    glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, light_color);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glEnable(GL_LIGHTING); //Ativa o modelo de iluminacao
+    glEnable(GL_LIGHT0); //Ativa a Luz 0. O OpenGL suporta pelo menos 8 pontos de luz
+
+    // Inicia as caracteristicas gerais dos materiais
+	GLfloat mat_ambient_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_ambient_diffuse);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL); //Um ou mais parametros do material rastreiam a cor atual do glColor.
+
+    // Ativa o modelo de sombreamento de Gouraud.
+    glShadeModel(GL_SMOOTH);
+
+    // Ativa o z-buffering, de modo a remover as superficies escondidas
+    glEnable(GL_DEPTH_TEST);
+
+    // define a cor com a qual a tela sera apagada
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    
     glutMainLoop();
     
 	return EXIT_SUCCESS;
