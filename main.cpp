@@ -30,11 +30,7 @@
 int h, w = 0;
 
 //Instancia de Jogador.
-
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo.
-// Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, false};
-// jogador.projetil.xOrigem = 5;
-
 Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 5, false}};
 
 //Instancia de Inimigo.
@@ -47,13 +43,11 @@ void init(void);
 void keyboard (unsigned char key, int x, int y);
 void display(void);
 void reshape (int w, int h);
-void timer(int value);
-void atira();
+void atira(int value);
 
 void init(void){
   glClearColor (1.0, 1.0, 1.0, 1.0);
   glEnable(GL_DEPTH_TEST); // Algoritmo Z-Buffer
-  glutTimerFunc(1, timer, 0); //(mseg, timer, value)
 }
 
 void display(){
@@ -89,8 +83,6 @@ void keyboard (unsigned char key, int x, int y){
 			jogador.projetil.tiro = true;
 			jogador.projetil.xOrigem = jogador.x;
 			jogador.projetil.yOrigem = jogador.y;
-			glutPostRedisplay();
-			atira();
 			break;
 		case 'Q':
 			break;
@@ -101,24 +93,20 @@ void keyboard (unsigned char key, int x, int y){
 /*
  * Funcao utilizada para a animacao com temporizador
  */
-void timer(int value){
-    glutTimerFunc(1, timer, 0);
-    glutPostRedisplay(); // Manda redesenhar a tela em cada frame
-}
 
-void atira(){
+void atira(int value){
     if (jogador.projetil.tiro) {
     	printf("Origem jogador antes: %f\n", jogador.projetil.xOrigem);
         jogador.projetil.xOrigem += 5.0f;
         printf("Origem jogador depois: %f\n", jogador.projetil.xOrigem);
         printf("Situação do tiro: %f\n", jogador.projetil.tiro);
-
         if (jogador.projetil.xOrigem > 5.0f) {
             jogador.projetil.tiro = false;
             printf("Situação do tiro: %f\n", jogador.projetil.tiro);
         }
     }
     glutPostRedisplay();
+    glutTimerFunc(16, atira, 0);
 }
 
 void specialKeyboard(int key, int x, int y){
@@ -153,8 +141,6 @@ int main(int argc, char** argv){
     glutInitWindowPosition(250,150); 
     glutCreateWindow ("Tank-1990 3D");
     
-    init();
-
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
@@ -181,6 +167,9 @@ int main(int argc, char** argv){
 
     // define a cor com a qual a tela sera apagada
     glClearColor(1.0, 1.0, 1.0, 1.0);
+    
+    glutTimerFunc(0, atira, 0); //(mseg, timer, value)
+    init();
     
     glutMainLoop();
     
