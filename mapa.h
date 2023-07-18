@@ -46,7 +46,7 @@ int mapa[tamMapa][tamMapa] = {	{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 }; 
  	
 
-void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimigo3, Projetil projetilJogador){
+void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimigo3){
 	for (int i = 0; i < tamMapa; i++){
 		for (int j = 0; j < tamMapa; j++){
 			if (mapa[i][j] == 0){
@@ -71,7 +71,7 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 			else if(mapa[i][j] == 5){
 				//Desenha o Pista.
-				pista(i, j);
+				gelo(i, j);
 			}
 			else if(mapa[i][j] == 6){
 				//Desenha o Aguia.

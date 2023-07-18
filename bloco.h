@@ -208,10 +208,10 @@ void metal(int i, int j){
 
 void arbusto(int i, int j){
 	glPushMatrix();
-		glColor3f(0.0, 0.7, 0.0);
+		glColor3f(0.0, 0.8, 0.0);
 		glTranslatef (j*1, i*1, 0.5);
 		glScalef (1.0, 1.0, 0.8);
-		draw_object_flat();
+		draw_object_smooth();
     glPopMatrix();
 }
 
@@ -221,7 +221,7 @@ void aguia(int i, int j){
 		glColor3f(0.6, 0.6, 0.6);
 		glTranslatef (j*1, i*1, 0.5);
 		glScalef (1.0, 1.0, 0.8);
-		draw_object_flat();
+		draw_object_smooth();
     glPopMatrix();
 }
 
@@ -236,16 +236,16 @@ void chao(int i, int j){
 
 void agua(int i, int j){
 	glPushMatrix();
-		glColor3f(0.0, 0.5, 1.0);
+		glColor3f(0.0, 0.1, 1.0);
 		glTranslatef (j*1, i*1, 0.5);
 		glScalef (1.0, 1.0, 0.1);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void pista(int i, int j){
+void gelo(int i, int j){
 	glPushMatrix();
-		glColor3f(0.7, 0.7, 0.7);
+		glColor3f(0.3, 0.3, 1.0);
 		glTranslatef (j*1, i*1, 0.5);
 		glScalef (1.0, 1.0, 0.1);
 		draw_object_smooth();

@@ -9,6 +9,7 @@ void desenhaTank(float i, float j, float direcao, int R, int G, int B){
 		glTranslatef (j*1, i*1, 0.5);
 		glScalef (1.0, 1.0, 0.8);
 		glutSolidCube(1.0);
+		glRotatef(direcao, 0.0 , 0.0 , 1.0);
 		
 		glPushMatrix();
 			glColor3f(R - 0.1, G - 0.1, B - 0.1);

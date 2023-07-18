@@ -29,19 +29,13 @@
 // Variaveis Globais
 int h, w = 0;
 
-// Instancia de Jogador.
-// Jogador jogador = {1.5, 5.5, 0.08, 0, 1.0, 1.0, 0.0};
-// 
-// Instancia de Inimigo.
-// Inimigo inimigo1 = {13.0, 13.0, 0.08, 0, 1.0, 0.0, 0.0};
-// Inimigo inimigo2 = {13.0, 6.5, 0.08, 0, 1.0, 0.0, 1.0};
-// Inimigo inimigo3 = {13.0, 1.5, 0.08, 0, 0.0, 1.0, 1.0};
-
 //Instancia de Jogador.
 
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo.
-Projetil projetilJogador  = {1, 4, 5};
-Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, false};
+// Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, false};
+// jogador.projetil.xOrigem = 5;
+
+Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 5, false}};
 
 //Instancia de Inimigo.
 Inimigo inimigo1 = {13, 13, 0.08, 0, 1.0, 0.0, 0.0};
@@ -53,19 +47,20 @@ void init(void);
 void keyboard (unsigned char key, int x, int y);
 void display(void);
 void reshape (int w, int h);
+void timer(int value);
+void atira();
 
 void init(void){
   glClearColor (1.0, 1.0, 1.0, 1.0);
   glEnable(GL_DEPTH_TEST); // Algoritmo Z-Buffer
+  glutTimerFunc(1, timer, 0); //(mseg, timer, value)
 }
 
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    criaMapa(jogador, inimigo1, inimigo2, inimigo3, projetilJogador);
-	if (jogador.projetil.tiro){
-		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem);
-	}    
+    criaMapa(jogador, inimigo1, inimigo2, inimigo3);
+	desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem);	
     glutSwapBuffers();
 }
 
@@ -94,6 +89,8 @@ void keyboard (unsigned char key, int x, int y){
 			jogador.projetil.tiro = true;
 			jogador.projetil.xOrigem = jogador.x;
 			jogador.projetil.yOrigem = jogador.y;
+			glutPostRedisplay();
+			atira();
 			break;
 		case 'Q':
 			break;
@@ -101,17 +98,27 @@ void keyboard (unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
-void updateTiro(int value) {
-    if (jogador.projetil.tiro) {
-        jogador.projetil.xOrigem += 1.0f;
+/*
+ * Funcao utilizada para a animacao com temporizador
+ */
+void timer(int value){
+    glutTimerFunc(1, timer, 0);
+    glutPostRedisplay(); // Manda redesenhar a tela em cada frame
+}
 
-        if (jogador.projetil.xOrigem > 1.0f) {
+void atira(){
+    if (jogador.projetil.tiro) {
+    	printf("Origem jogador antes: %f\n", jogador.projetil.xOrigem);
+        jogador.projetil.xOrigem += 5.0f;
+        printf("Origem jogador depois: %f\n", jogador.projetil.xOrigem);
+        printf("Situação do tiro: %f\n", jogador.projetil.tiro);
+
+        if (jogador.projetil.xOrigem > 5.0f) {
             jogador.projetil.tiro = false;
+            printf("Situação do tiro: %f\n", jogador.projetil.tiro);
         }
     }
-
     glutPostRedisplay();
-    glutTimerFunc(16, updateTiro, 0);
 }
 
 void specialKeyboard(int key, int x, int y){
@@ -123,17 +130,17 @@ void specialKeyboard(int key, int x, int y){
 			break;
 		case GLUT_KEY_DOWN:
 			jogador.x -= jogador.velocidade;
-			jogador.direcaoCano = 10;
+			jogador.direcaoCano = 180;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_RIGHT:
 			jogador.y += jogador.velocidade;
-			jogador.direcaoCano = 180;
+			jogador.direcaoCano = -90;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
 			jogador.y -= jogador.velocidade;
-			jogador.direcaoCano = -90;
+			jogador.direcaoCano = 90;
 			glutPostRedisplay();
 			break;
 	}
@@ -143,7 +150,7 @@ int main(int argc, char** argv){
 	glutInit(&argc, argv); 
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(1366,768);
-    glutInitWindowPosition(500,100); 
+    glutInitWindowPosition(250,150); 
     glutCreateWindow ("Tank-1990 3D");
     
     init();
@@ -151,7 +158,6 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
-    glutTimerFunc(5, updateTiro, 0);
     glutSpecialFunc(specialKeyboard);
     
     GLfloat light_position[] = {-1.0, 1.0, 1.0, 0.0};
