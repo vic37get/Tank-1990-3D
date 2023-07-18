@@ -10,6 +10,8 @@ typedef struct{
 	int R;
 	int G;
 	int B;
+	bool vivo;
+	Projetil projetil;
 }Inimigo;
 
 #endif

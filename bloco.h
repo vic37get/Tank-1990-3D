@@ -1,4 +1,6 @@
 //Criação dos tipos de bloco
+#ifndef BLOCO_H
+#define BLOCO_H
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -135,7 +137,6 @@ void calcularNormaisVertices(){
     
 }
 
-
 /*
  * Desenha o objeto, triangulo por triangulo, definindo os vetores
  * normais de cada vertice (ideal para usar com Gouraud shading).
@@ -183,7 +184,7 @@ void parede(int i, int j){
 	glPushMatrix();
 		glColor3f(0.3, 0.3, 0.3);
 		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 1.0);
+		glScalef (1.0, 1.0, 1.6);
 		draw_object_smooth();
     glPopMatrix();
 }
@@ -251,3 +252,5 @@ void gelo(int i, int j){
 		draw_object_smooth();
     glPopMatrix();
 }
+
+#endif

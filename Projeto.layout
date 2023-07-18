@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="Yes" Tabpos="1" TopLine="64">
-			<Cursor Line="80" Column="60"/>
+		<File Name="main.cpp" Top="Yes" Tabpos="1" TopLine="70">
+			<Cursor Line="83" Column="16"/>
+		</File>
+		<File Name="projetil.h" Top="No" Tabpos="2" TopLine="1">
+			<Cursor Line="23" Column="42"/>
+		</File>
+		<File Name="jogador.h" Top="No" Tabpos="3" TopLine="1">
+			<Cursor Line="18" Column="2"/>
+			<Selection Line="18" Column="20"/>
+		</File>
+		<File Name="inimigo.h" Top="No" Tabpos="4" TopLine="1">
+			<Cursor Line="2" Column="1"/>
+			<Selection Line="3" Column="18"/>
+		</File>
+		<File Name="tank.h" Top="No" Tabpos="5" TopLine="1">
+			<Cursor Line="26" Column="28"/>
+		</File>
+		<File Name="bloco.h" Top="No" Tabpos="6" TopLine="1">
+			<Cursor Line="256" Column="7"/>
 		</File>
 	</Files>
 </Layout>

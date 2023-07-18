@@ -30,13 +30,14 @@
 int h, w = 0;
 
 //Instancia de Jogador.
-//X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo.
-Jogador jogador = {1, 4, 0.08, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 5, false}};
+//X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
+Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
 
 //Instancia de Inimigo.
-Inimigo inimigo1 = {13, 13, 0.08, 0, 1.0, 0.0, 0.0};
-Inimigo inimigo2 = {13, 6, 0.08, 0, 1.0, 0.0, 1.0};
-Inimigo inimigo3 = {13, 1, 0.08, 0, 0.0, 1.0, 1.0};
+//x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
+Inimigo inimigo1 = {13, 13, 0.1, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo2 = {13, 6, 0.1, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo3 = {13, 1, 0.1, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 
 //CallBacks das funções.
 void init(void);
@@ -54,7 +55,9 @@ void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
-	desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem);	
+    if(jogador.projetil.tiro){
+		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
+	}
     glutSwapBuffers();
 }
 
@@ -69,8 +72,8 @@ void reshape (int w, int h){
     // Define a forma do volume de visualizacao para termos
     // uma projecao perspectiva (3D).
     gluPerspective(70, (float)w/(float)h, 1.0, 80.0); //(angulo, aspecto, ponto_proximo, ponto distante)
-    gluLookAt(6.0, 6.0, 13.0, 	// posição da câmera (olho) 
-			  6.0, 6.0, 6.0, 	// centro da cena
+    gluLookAt(6.0, 6.0, 14.0, 	// posição da câmera (olho) 
+			  6.0, 6.0, 0.0, 	// centro da cena
 			  0.0, 1.0, 0.0); // sentido ou orientacao da camera (de cabeca para cima)
     // muda para o modo GL_MODELVIEW para desenhar na tela
     glMatrixMode (GL_MODELVIEW);
@@ -80,31 +83,61 @@ void keyboard (unsigned char key, int x, int y){
 	switch (key) {
 		//Atirar
 		case 'q':
+		case 'Q':
 			jogador.projetil.tiro = true;
 			jogador.projetil.xOrigem = jogador.x;
 			jogador.projetil.yOrigem = jogador.y;
-			break;
-		case 'Q':
+			jogador.projetil.direcao = jogador.direcaoCano;
 			break;
 	}
     glutPostRedisplay();
 }
 
-/*
- * Funcao utilizada para a animacao com temporizador
- */
-
 void atira(int value){
+	/*
+	*Função utilizada para fazer os tiros do jogador.
+	*jogador.projetil.tiro verifica se o tiro foi efetuado.
+	*jogador.projetil.direcao é a variavel que armazena a direção do tiro quando a tecla Q foi pressionada.	*
+	*/
     if (jogador.projetil.tiro) {
-    	printf("Origem jogador antes: %f\n", jogador.projetil.xOrigem);
-        jogador.projetil.xOrigem += 5.0f;
-        printf("Origem jogador depois: %f\n", jogador.projetil.xOrigem);
-        printf("Situação do tiro: %f\n", jogador.projetil.tiro);
-        if (jogador.projetil.xOrigem > 5.0f) {
-            jogador.projetil.tiro = false;
-            printf("Situação do tiro: %f\n", jogador.projetil.tiro);
-        }
+    	switch(jogador.projetil.direcao){
+			case 0:
+				jogador.projetil.xOrigem += jogador.projetil.velocidade;
+	        	if (jogador.projetil.xOrigem > jogador.x + jogador.projetil.distancia){
+	            	jogador.projetil.tiro = false;
+	            	jogador.projetil.xOrigem = jogador.x;
+	        	}
+				break;
+			
+			case 180:
+				jogador.projetil.xOrigem -= jogador.projetil.velocidade;
+				if (jogador.projetil.xOrigem < jogador.x - jogador.projetil.distancia){
+		         	jogador.projetil.tiro = false;
+		          	jogador.projetil.xOrigem = jogador.x;
+				}
+	        	break;
+   	     
+	        case -90:
+				jogador.projetil.yOrigem += jogador.projetil.velocidade;
+	        	if (jogador.projetil.yOrigem > jogador.y + jogador.projetil.distancia){
+	            	jogador.projetil.tiro = false;
+	            	jogador.projetil.yOrigem = jogador.y;
+	        	}
+	        	break;
+	        
+	        case 90:
+				jogador.projetil.yOrigem -= jogador.projetil.velocidade;
+	        	if (jogador.projetil.yOrigem < jogador.y - jogador.projetil.distancia){
+	            	jogador.projetil.tiro = false;
+	            	jogador.projetil.yOrigem = jogador.y;
+	        	}
+	        	break;
+	        
+			default:
+				break;
+		}
     }
+    //Atualiza o tiro 60 frames por segundo, fazendo a animação da bala.
     glutPostRedisplay();
     glutTimerFunc(16, atira, 0);
 }
