@@ -31,13 +31,13 @@ int h, w = 0;
 
 //Instancia de Jogador.
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
-Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
+Jogador jogador = {1.1, 4.25, 0.1f, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
 
 //Instancia de Inimigo.
 //x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
-Inimigo inimigo1 = {13, 13, 0.1, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo2 = {13, 6, 0.1, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo3 = {13, 1, 0.1, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo1 = {13, 13, 0.1f, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo2 = {13, 6, 0.1f, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo3 = {13, 1, 0.1f, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 
 //CallBacks das funções.
 void init(void);
@@ -93,6 +93,76 @@ void keyboard (unsigned char key, int x, int y){
     glutPostRedisplay();
 }
 
+//Colisões dos tiros
+bool colisaotiroUp(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = (int)x; i < 15; i++){
+		if(mapa[i][(int)y] != 0 && mapa[i][(int)y] != 1 && mapa[i][(int)y] != 4 && mapa[i][(int)y] != 5){
+			distancia = sqrt(pow(x - i, 2));
+			if (distancia < velocidade + 1){
+				if(mapa[i][(int)y] == 2){
+				 mapa[i][(int)y] = 0;
+				 glutPostRedisplay();
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaotiroDown(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = int(x); i >= 0; i--){
+		if(mapa[i][(int)y] != 0 && mapa[i][(int)y] != 1 && mapa[i][(int)y] != 4 && mapa[i][(int)y] != 5){
+			distancia = sqrt(pow(x - i, 2));
+			if (distancia < velocidade + 1){
+				if(mapa[i][(int)y] == 2){
+				 mapa[i][(int)y] = 0;
+				 glutPostRedisplay();
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaotiroRight(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = (int)y; i < 15; i++){
+		if(mapa[(int)x][i] != 0 && mapa[(int)x][i] != 1 && mapa[(int)x][i] != 4 && mapa[(int)x][i] != 5){
+			distancia = sqrt(pow(y - i, 2));
+			if (distancia < velocidade + 1){
+				if(mapa[(int)x][i] == 2){
+				 mapa[(int)x][i] = 0;
+				 glutPostRedisplay();
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaotiroLeft(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = int(y); i >= 0; i--){
+		if(mapa[(int)x][i] != 0 && mapa[(int)x][i] != 1 && mapa[(int)x][i] != 4 && mapa[(int)x][i] != 5){
+			printf("Mapa: (%d, %d), Bloco: %f\n", (int)x, i, mapa[(int)x][i]);
+			distancia = sqrt(pow(y - i, 2));
+			if (distancia < velocidade + 1){
+				if(mapa[(int)x][i] == 2){
+				 mapa[(int)x][i] = 0;
+				 glutPostRedisplay();
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void atira(int value){
 	/*
 	*Função utilizada para fazer os tiros do jogador.
@@ -103,7 +173,7 @@ void atira(int value){
     	switch(jogador.projetil.direcao){
 			case 0:
 				jogador.projetil.xOrigem += jogador.projetil.velocidade;
-	        	if (jogador.projetil.xOrigem > jogador.x + jogador.projetil.distancia){
+	        	if (jogador.projetil.xOrigem > jogador.x + jogador.projetil.distancia || colisaotiroUp(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.velocidade)){
 	            	jogador.projetil.tiro = false;
 	            	jogador.projetil.xOrigem = jogador.x;
 	        	}
@@ -111,7 +181,7 @@ void atira(int value){
 			
 			case 180:
 				jogador.projetil.xOrigem -= jogador.projetil.velocidade;
-				if (jogador.projetil.xOrigem < jogador.x - jogador.projetil.distancia){
+				if (jogador.projetil.xOrigem < jogador.x - jogador.projetil.distancia || colisaotiroDown(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.velocidade)){
 		         	jogador.projetil.tiro = false;
 		          	jogador.projetil.xOrigem = jogador.x;
 				}
@@ -119,7 +189,7 @@ void atira(int value){
    	     
 	        case -90:
 				jogador.projetil.yOrigem += jogador.projetil.velocidade;
-	        	if (jogador.projetil.yOrigem > jogador.y + jogador.projetil.distancia){
+	        	if (jogador.projetil.yOrigem > jogador.y + jogador.projetil.distancia || colisaotiroDown(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.velocidade)){
 	            	jogador.projetil.tiro = false;
 	            	jogador.projetil.yOrigem = jogador.y;
 	        	}
@@ -127,7 +197,7 @@ void atira(int value){
 	        
 	        case 90:
 				jogador.projetil.yOrigem -= jogador.projetil.velocidade;
-	        	if (jogador.projetil.yOrigem < jogador.y - jogador.projetil.distancia){
+	        	if (jogador.projetil.yOrigem < jogador.y - jogador.projetil.distancia || colisaotiroDown(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.velocidade)){
 	            	jogador.projetil.tiro = false;
 	            	jogador.projetil.yOrigem = jogador.y;
 	        	}
@@ -142,25 +212,89 @@ void atira(int value){
     glutTimerFunc(16, atira, 0);
 }
 
+
+
+//Colisões ao andar
+bool colisaoUp(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = (int)x; i < 15; i++){
+		if(mapa[i][(int)y] != 0 && mapa[i][(int)y] != 1 && mapa[i][(int)y] != 4 && mapa[i][(int)y] != 5){
+			distancia = sqrt(pow(x - i, 2));
+			if (distancia < velocidade + 1){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaoDown(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = int(x); i >= 0; i--){
+		if(mapa[i][(int)y] != 0 && mapa[i][(int)y] != 1 && mapa[i][(int)y] != 4 && mapa[i][(int)y] != 5){
+			distancia = sqrt(pow(x - i, 2));
+			if (distancia < velocidade + 1){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaoRight(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = (int)y; i < 15; i++){
+		if(mapa[(int)x][i] != 0 && mapa[(int)x][i] != 1 && mapa[(int)x][i] != 4 && mapa[(int)x][i] != 5){
+			distancia = sqrt(pow(y - i, 2));
+			if (distancia < velocidade + 1){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool colisaoLeft(float x, float y, float velocidade){
+	float distancia = 0;
+	for(int i = int(y); i >= 0; i--){
+		if(mapa[(int)x][i] != 0 && mapa[(int)x][i] != 1 && mapa[(int)x][i] != 4 && mapa[(int)x][i] != 5){
+			distancia = sqrt(pow(y - i, 2));
+			if (distancia < velocidade + 1){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 void specialKeyboard(int key, int x, int y){
 	switch(key){
 		case GLUT_KEY_UP:
-			jogador.x += jogador.velocidade;
+			if(colisaoUp(jogador.x, jogador.y, jogador.velocidade) == false){
+				jogador.x += jogador.velocidade;
+			}
 			jogador.direcaoCano = 0;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
-			jogador.x -= jogador.velocidade;
+			if(colisaoDown(jogador.x, jogador.y, jogador.velocidade) == false){
+				jogador.x -= jogador.velocidade;
+			}
 			jogador.direcaoCano = 180;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_RIGHT:
-			jogador.y += jogador.velocidade;
+			if(colisaoRight(jogador.x, jogador.y, jogador.velocidade) == false){
+				jogador.y += jogador.velocidade;
+			}
 			jogador.direcaoCano = -90;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
-			jogador.y -= jogador.velocidade;
+			if(colisaoLeft(jogador.x, jogador.y, jogador.velocidade) == false){
+				jogador.y -= jogador.velocidade;
+			}
 			jogador.direcaoCano = 90;
 			glutPostRedisplay();
 			break;

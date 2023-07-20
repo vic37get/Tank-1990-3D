@@ -11,7 +11,7 @@ void desenhaTank(float i, float j, int direcao, int R, int G, int B){
 	glPushMatrix();
 		glColor3f(R, G, B);
 		glTranslatef (j*1, i*1, 0.5);
-		glScalef (0.9, 0.9, 0.6);
+		glScalef (1.0, 1.0, 0.6);
 		draw_object_smooth();
 		glRotatef(direcao, 0.0 , 0.0 , 1.0);
 		//Parte de cima do tank.

@@ -12,7 +12,7 @@ typedef struct{
 	float velocidade;
 	float distancia;
 	int direcao;
-	float tiro;
+	bool tiro;
 	
 }Projetil;
 
