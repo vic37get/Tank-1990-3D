@@ -6,12 +6,14 @@
 #include <GL/glu.h>
 #include "bloco.h"
 
+float tam_tank = 0.8;
+
 void desenhaTank(float i, float j, int direcao, int R, int G, int B){
 	//Corpo do tank.
 	glPushMatrix();
 		glColor3f(R, G, B);
 		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.6);
+		glScalef (tam_tank, tam_tank, 0.5);
 		draw_object_smooth();
 		glRotatef(direcao, 0.0 , 0.0 , 1.0);
 		//Parte de cima do tank.

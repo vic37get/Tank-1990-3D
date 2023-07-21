@@ -5,6 +5,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+float tam_bloco = 1.0;
+
 /*
 - Detalhamento do Mapa
 	- Chão: 0
@@ -180,75 +182,77 @@ void draw_object_flat(void){
 }
 
 
-void parede(int i, int j){
+void parede(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.3, 0.3, 0.3);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 1.6);
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void tijolo(int i, int j){
+void tijolo(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(1.0, 0.5, 0.0);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.8);
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void metal(int i, int j){
+void metal(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.9, 0.9, 0.9);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.8);
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void arbusto(int i, int j){
+void arbusto(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.0, 0.8, 0.0);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.8);
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
     glPopMatrix();
 }
 
 //Implementar o mais parecido possivel.
-void aguia(int i, int j){
+void aguia(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.6, 0.6, 0.6);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.8);
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void chao(int i, int j){
+//Fazem parte do chão
+
+void chao(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.1, 0.1, 0.1);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.1);
+		glTranslatef (j*h+x, i*w+y, 0.1);
+		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void agua(int i, int j){
+void agua(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.0, 0.1, 1.0);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.1);
+		glTranslatef (j*h+x, i*w+y, 0.1);
+		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();
     glPopMatrix();
 }
 
-void gelo(int i, int j){
+void gelo(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(0.3, 0.3, 1.0);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (1.0, 1.0, 0.1);
+		glTranslatef (j*h+x, i*w+y, 0.1);
+		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();
     glPopMatrix();
 }
