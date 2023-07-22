@@ -12,7 +12,7 @@ typedef struct{
 	float G;
 	float B;
 	//Quantidade de vidas.
-	float vida;
+	int vida;
 	//Vivo ou morto.
 	bool vivo;
 	Projetil projetil;
