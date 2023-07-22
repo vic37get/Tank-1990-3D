@@ -15,7 +15,6 @@
 #define tamMapa 15
 
 
-
 /*
 - Detalhamento do Mapa
 	- Chão: 0
@@ -27,6 +26,11 @@
 	- Aguia: 6
 	- Parede externa: 7
 */
+
+bool startGame = false;
+bool gameOverAudio = false;
+bool explosion = false;
+bool atiraAudio = false;
 
 int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 2, 2, 2, 0, 0, 2, 6, 2, 0, 2, 2, 2, 2, 7},
@@ -84,6 +88,27 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 		}
 	}
+	
+	if(startGame == false){
+		PlaySound("sounds/gamestart.wav", NULL, SND_ASYNC|SND_FILENAME);
+		startGame = true;
+	}
+	
+	if(gameOverAudio){
+		PlaySound("sounds/gameover.wav", NULL, SND_ASYNC|SND_FILENAME);
+		gameOverAudio = false;
+	}
+	
+	if(explosion){
+		PlaySound("sounds/explosion.wav", NULL, SND_ASYNC|SND_FILENAME);
+		explosion = false;
+	}
+	
+	if(atiraAudio){
+		PlaySound("sounds/fire.wav", NULL, SND_ASYNC|SND_FILENAME);
+		atiraAudio = false;
+	}
+	
 	//Se o jogador ainda estiver vivo, ele é desenhado.
 	if(jogador.vivo){
 		desenhaTank(jogador.x, jogador.y, jogador.direcaoCano, jogador.R, jogador.G, jogador.B);

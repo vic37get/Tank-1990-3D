@@ -20,6 +20,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <mmsystem.h>
 
 #include "mapa.h"
 #include "jogador.h"
@@ -28,8 +29,11 @@
 
 // Variaveis Globais
 int h, w = 0;
-bool game_over = false;
+
 bool venceu = false;
+bool game_over = false;
+
+int time = 0;
 
 //Instancia de Jogador.
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
@@ -62,6 +66,7 @@ void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
+    
     if(jogador.projetil.tiro){
 		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
 	}
@@ -98,6 +103,7 @@ void keyboard (unsigned char key, int x, int y){
 		case 'q':
 		case 'Q':
 			if (jogador.projetil.tiro != true){
+				PlaySound("sounds/fire.wav", NULL, SND_ASYNC);
 				jogador.projetil.tiro = true;
 				jogador.projetil.xOrigem = jogador.x;
 				jogador.projetil.yOrigem = jogador.y;
@@ -125,6 +131,7 @@ void colisaoTiroBlocoJogador(Jogador *jogador){
 					if (mapa[i][j] == 6){
 						mapa[i][j] = 0;
 						game_over = true;
+						gameOverAudio = true;
 					}
 				}
 			}
@@ -137,16 +144,19 @@ void colisaoTiroTanksJogador(Jogador *jogador, Inimigo *primeiroInimigo, Inimigo
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, primeiroInimigo->x * 1.0, primeiroInimigo->y * 1.0, 1.0) == true){
 		primeiroInimigo->vivo = false;
 		jogador->projetil.tiro = false;
+		explosion = true;
 	}
 	
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, segundoInimigo->x * 1.0, segundoInimigo->y * 1.0, 1.0) == true){
 		segundoInimigo->vivo = false;
 		jogador->projetil.tiro = false;
+		explosion = true;
 	}
 		
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, terceiroInimigo->x * 1.0, terceiroInimigo->y * 1.0, 1.0) == true){
 		terceiroInimigo->vivo = false;
 		jogador->projetil.tiro = false;
+		explosion = true;
 	}
 	glutPostRedisplay();
 }
@@ -168,6 +178,7 @@ void colisaoTiroBlocoInimigo(Inimigo *inimigoAtual){
 					if (mapa[i][j] == 6){
 						mapa[i][j] = 0;
 						game_over = true;
+						gameOverAudio = true;
 					}
 				}
 			}
@@ -186,11 +197,13 @@ void colisaoTiroTanksInimigo(Inimigo *inimigoAtual, Jogador *player, Inimigo *pr
 			if(player->vida == 0){
 				player->vivo = false;
 				game_over = true;
+				gameOverAudio = true;
 			}
 	}
 	if (colidir(inimigoAtual->projetil.xOrigem, inimigoAtual->projetil.yOrigem, tam_projetil, primeiroInimigo->x * 1.0, primeiroInimigo->y * 1.0, 1.0) == true){
 		primeiroInimigo->vivo = false;
 		inimigoAtual->projetil.tiro = false;
+		
 	}
 		
 	if (colidir(inimigoAtual->projetil.xOrigem, inimigoAtual->projetil.yOrigem, tam_projetil, segundoInimigo->x * 1.0, segundoInimigo->y * 1.0, 1.0) == true){
@@ -261,6 +274,7 @@ void atiraInimigo(int value){
 	*/
 	
 	//Para o inimigo 1.
+	
     if (inimigo1.projetil.tiro) {
     	switch(inimigo1.projetil.direcao){
 			case 0:
@@ -530,6 +544,11 @@ void specialKeyboard(int key, int x, int y){
 }
 
 void verificaStatus(int value){
+	time += 16;
+	if(time > 2600){
+		startGame = true;
+		printf("Terminou.\n");
+	}
 	//Verifica se ocorreu game over ou vitória.
 	if(jogador.vivo && (inimigo1.vivo == false && inimigo2.vivo == false && inimigo3.vivo == false)){
 		venceu = true;
@@ -537,7 +556,6 @@ void verificaStatus(int value){
 	}
 	else if(game_over){
 		printf("GAME OVER!\n");
-		
 	} 
 	glutPostRedisplay();
 	glutTimerFunc(16, verificaStatus, 0);
