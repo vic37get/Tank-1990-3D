@@ -21,7 +21,6 @@
 #include <cstdlib>
 
 #include <mmsystem.h>
-
 #include "mapa.h"
 #include "jogador.h"
 #include "inimigo.h"
@@ -31,7 +30,7 @@
 int h, w = 0;
 
 //Partida
-bool venceu = false;
+bool game_win = false;
 bool game_over = false;
 
 //Bonus
@@ -41,6 +40,7 @@ float bonusX, bonusY;
 bool bonus_boat = false;
 bool bonus_gun = false;
 bool bonus_wall = false;
+float velocidade_bonus = 0;
 
 //Movimentos Inimigos
 int mov_inimigo1, mov_inimigo2, mov_inimigo3;
@@ -48,12 +48,14 @@ int mov_inimigo1, mov_inimigo2, mov_inimigo3;
 //Instancia de Jogador.
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
 Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
+float velocidade_inicial = jogador.velocidade;
 
 //Instancia de Inimigo.
 //x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
 Inimigo inimigo1 = {13, 13, 0.1, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 Inimigo inimigo2 = {13, 6, 0.1, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 Inimigo inimigo3 = {13, 1, 0.1, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+float vel_inicialInimigo = inimigo1.velocidade;
 
 //CallBacks das funções.
 void init(void);
@@ -65,8 +67,9 @@ bool colidir(float jogadorX, float jogadorY, float tam_tank, float blocoX, float
 void bonus();
 void aplicaBonus(int tipo_bonus);
 
+
 void init(void){
-  glClearColor (1.0, 1.0, 1.0, 1.0);
+  glClearColor (0.4, 0.4, 0.4, 1.0);
   glEnable(GL_DEPTH_TEST); // Algoritmo Z-Buffer
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -79,7 +82,7 @@ void display(){
     glLoadIdentity();
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
     
-    if(jogador.projetil.tiro){
+    if(jogador.projetil.tiro && (game_over == false && game_win == false)){
 		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
 	}
 	if(inimigo1.projetil.tiro){
@@ -94,21 +97,16 @@ void display(){
 	if(bonus_ativo == true){
 		bonus();
 	}
-	
     glutSwapBuffers();
 }
 
 void reshape (int w, int h){
-    // muda para o modo GL_PROJECTION e reinicia a matriz de projecao
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-
-    // define o tamanho da area de desenho da janela
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-    
-    gluPerspective(40, (float)w/(float)h, 1.0, 50.0);
-    gluLookAt(6.0,-5.0,15.0, 	// posição da câmera (olho) 
-			  6.0,6.0,0.0, 	// centro da cena
+    gluPerspective(45, (float)w/(float)h, 1.0, 100.0);
+    gluLookAt(8.0,-5.0,15.0, 	// posição da câmera (olho) 
+			  8.0,6.0,0.0, 	// centro da cena
 			  0.0,1.0,0.0);
     glMatrixMode (GL_MODELVIEW);
 }
@@ -118,13 +116,17 @@ void keyboard (unsigned char key, int x, int y){
 		//Atirar
 		case 'q':
 		case 'Q':
-			if (jogador.projetil.tiro != true){
-				PlaySound("sounds/fire.wav", NULL, SND_ASYNC);
-				jogador.projetil.tiro = true;
-				jogador.projetil.xOrigem = jogador.x;
-				jogador.projetil.yOrigem = jogador.y;
-				jogador.projetil.direcao = jogador.direcaoCano;
+			if(game_over == false && game_win == false){
+				if (jogador.projetil.tiro != true){
+					PlaySound("sounds/fire.wav", NULL, SND_ASYNC);
+					jogador.projetil.tiro = true;
+					jogador.projetil.xOrigem = jogador.x;
+					jogador.projetil.yOrigem = jogador.y;
+					jogador.projetil.direcao = jogador.direcaoCano;
+				}
 			}
+			break;
+		default:
 			break;
 	}
     glutPostRedisplay();
@@ -450,8 +452,10 @@ bool colidir(float jogadorX, float jogadorY, float tam_tank, float blocoX, float
 void colisaoBlocoMovimentoJogador(unsigned char key, Jogador *jogador){
 	for(int i = 0; i < tamMapa; i++){
 		for(int j = 0; j < tamMapa; j++){
-			if (colidir(jogador->x, jogador->y, tam_tank, i * tam_bloco, j * tam_bloco, tam_bloco) == true){
-				if (bonus_boat){
+			if(colidir(jogador->x, jogador->y, tam_tank, i * tam_bloco, j * tam_bloco, tam_bloco) == true){
+				//Se o bonus boat tiver sido pego.
+				if(bonus_boat){
+					//Colide com os blocos mas não com a água.
 					if((mapa[i][j] == 2) || (mapa[i][j] == 3) || (mapa[i][j] == 6) || (mapa[i][j] == 7)){
 						if(key==GLUT_KEY_UP) jogador->x -= jogador->velocidade;
 				    	else if(key==GLUT_KEY_DOWN) jogador->x += jogador->velocidade;
@@ -460,6 +464,7 @@ void colisaoBlocoMovimentoJogador(unsigned char key, Jogador *jogador){
 					}
 					
 				}
+				//Colide com os blocos e a agua.
 				else{
 					if((mapa[i][j] == 2) || (mapa[i][j] == 3) || (mapa[i][j] == 6) || (mapa[i][j] == 7) || mapa[i][j] == 1){
 						if(key==GLUT_KEY_UP) jogador->x -= jogador->velocidade;
@@ -469,13 +474,24 @@ void colisaoBlocoMovimentoJogador(unsigned char key, Jogador *jogador){
 					}
 					
 				}
-				
+				//Andar mais rápido no gelo.
+				if(mapa[i][j] == 5){
+					jogador->velocidade = velocidade_inicial*2;
+				}
+				else{
+					if(velocidade_inicial > velocidade_bonus){
+						jogador->velocidade = velocidade_inicial;
+					}
+					else{
+						jogador->velocidade = velocidade_bonus;	
+					}
+				}
+				//Obter um bônus no mapa.
 				if(bonus_ativo == true && bonusX == i && bonusY == j){
 					bonus_ativo = false;
 					printf("PEGOU O BONUS!\n");
 					printf("TIPO BONUS: %d\n", tipo_bonus);
 					aplicaBonus(tipo_bonus);
-					
 				}
 			}
 		}
@@ -491,6 +507,13 @@ void colisaoBlocoMovimentoInimigo(int movimentoInimigo, Inimigo *inimigoAtual){
 				    else if(movimentoInimigo==2) inimigoAtual->x += inimigoAtual->velocidade;
 				    else if(movimentoInimigo==4) inimigoAtual->y += inimigoAtual->velocidade;
 				    else if(movimentoInimigo==3) inimigoAtual->y -= inimigoAtual->velocidade;
+				}
+				//Anda mais rápido no gelo.
+				if(mapa[i][j] == 5){
+					inimigoAtual->velocidade = vel_inicialInimigo + (vel_inicialInimigo/2);
+				}
+				else{
+					inimigoAtual->velocidade = vel_inicialInimigo;
 				}
 			}
 		}
@@ -570,38 +593,41 @@ void esperaMovimento(int value){
 	glutTimerFunc(16, esperaMovimento, 0);
 }
 
+//Movimentos do jogador.
 void specialKeyboard(int key, int x, int y){
-	switch(key){
-		case GLUT_KEY_UP:
-			jogador.x += jogador.velocidade;
-			jogador.direcaoCano = 0;
-			glutPostRedisplay();
-			break;
-		case GLUT_KEY_DOWN:
-			jogador.x -= jogador.velocidade;
-			jogador.direcaoCano = 180;
-			glutPostRedisplay();
-			break;
-		case GLUT_KEY_RIGHT:
-			jogador.y += jogador.velocidade;
-			jogador.direcaoCano = -90;
-			glutPostRedisplay();
-			break;
-		case GLUT_KEY_LEFT:
-			jogador.y -= jogador.velocidade;
-			jogador.direcaoCano = 90;
-			glutPostRedisplay();
-			break;
-		default:
-			break;
+	if(game_over == false && game_win == false){
+		switch(key){
+			case GLUT_KEY_UP:
+				jogador.x += jogador.velocidade;
+				jogador.direcaoCano = 0;
+				glutPostRedisplay();
+				break;
+			case GLUT_KEY_DOWN:
+				jogador.x -= jogador.velocidade;
+				jogador.direcaoCano = 180;
+				glutPostRedisplay();
+				break;
+			case GLUT_KEY_RIGHT:
+				jogador.y += jogador.velocidade;
+				jogador.direcaoCano = -90;
+				glutPostRedisplay();
+				break;
+			case GLUT_KEY_LEFT:
+				jogador.y -= jogador.velocidade;
+				jogador.direcaoCano = 90;
+				glutPostRedisplay();
+				break;
+			default:
+				break;
+		}
+		colisaoBlocoMovimentoJogador(key, &jogador);
 	}
-	colisaoBlocoMovimentoJogador(key, &jogador);
 }
 
 void verificaStatus(int value){
 	//Verifica se ocorreu game over ou vitória.
 	if(jogador.vivo && (inimigo1.vivo == false && inimigo2.vivo == false && inimigo3.vivo == false)){
-		venceu = true;
+		game_win = true;
 		printf("VITORIA!\n");
 	}
 	else if(game_over){
@@ -635,6 +661,7 @@ void bonusWall(int value){
 	glutTimerFunc(15000, bonusWall, 0);
 }
 
+//Função que aplica o bônus no jogador.
 void aplicaBonus(int tipo_bonus){
 	switch(tipo_bonus){
 	case 1:
@@ -653,23 +680,25 @@ void aplicaBonus(int tipo_bonus){
 		printf("Uma vida a mais, Vidas: %d", jogador.vida);
 		break;
 	case 3:
-		jogador.velocidade +=0.1;
+		jogador.velocidade += 0.1;
 		jogador.projetil.velocidade += 0.2;
+		velocidade_bonus = jogador.velocidade;
 		printf("Velocidade de movimento e de projetil aumentadas!\nVelocidade de movimento: %f\nVelocidade de projetil: %f", jogador.velocidade, jogador.projetil.velocidade);
 		break;
 	case 4:
 		bonus_boat = true;
-		printf("Agora é permitido andar sobre a água!\n");
+		printf("Agora e permitido andar sobre a água!\n");
 		break;
 	case 5:
 		bonus_gun = true;
-		printf("Agora é permitido quebrar metal!\n");
+		printf("Agora e permitido quebrar metal!\n");
 		break;
 	default:
 		break;
 	}
 }
 
+//A cada 15 segundos sorteia um bonus em um lugar do mapa.
 void sorteiaBonus(int value){
 	if(bonus_ativo == false){
 		posicaoBonus = gerarNumeroAleatorio(1, 3);
@@ -680,6 +709,7 @@ void sorteiaBonus(int value){
 	glutTimerFunc(15000, sorteiaBonus, 0);
 }
 
+//Posiciona e renderiza a caixinha de bonus.
 void bonus(){
 	switch(posicaoBonus){
 		case 1:
@@ -729,8 +759,7 @@ int main(int argc, char** argv){
 
 
     // define a cor com a qual a tela sera apagada
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    
+    glClearColor(0.4, 0.4, 0.4, 1.0);
     glutTimerFunc(0, atira, 0); //(mseg, timer, value)
     glutTimerFunc(0, esperaMovimento, 0);
     glutTimerFunc(0, atiraInimigo, 0);

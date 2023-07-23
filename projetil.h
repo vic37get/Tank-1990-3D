@@ -25,14 +25,14 @@ void desenhaProjetil(float xOrigem, float yOrigem, int direcao){
 		glTranslatef (yOrigem*1, xOrigem*1, 0.5);
 		glRotatef(direcao, 0.0 , 0.0 , 1.0);
 		glScalef (tam_projetil, tam_projetil, tam_projetil);
-		draw_object_flat();
+		glutSolidCube(1.0);
 		//Parte da frente do Projetil.
-		// glPushMatrix();
-		// 	glColor3f(0.2, 0.2, 0.2);
-		// 	glTranslatef(0.0, 0.5, 0.0);
-		// 	glScalef (1.0, 0.7, 1.0);
-		// 	draw_object_flat();
-		// glPopMatrix();
+		glPushMatrix();
+			glColor3f(0.1, 0.1, 0.1);
+			glTranslatef(0.0, 0.5, 0.0);
+			glScalef (1.0, 0.5, 1.0);
+			glutSolidCube(1.0);
+		glPopMatrix();
     glPopMatrix();
 }
 #endif
