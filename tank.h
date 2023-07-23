@@ -16,17 +16,31 @@ void desenhaTank(float i, float j, int direcao, int R, int G, int B){
 		glScalef (tam_tank, tam_tank, 0.5);
 		draw_object_smooth();
 		glRotatef(direcao, 0.0 , 0.0 , 1.0);
+		//Esteira direita.
+		glPushMatrix();
+			glColor3f(0.1, 0.1, 0.1);
+			glTranslatef(0.55, 0, 0);
+			glScalef (0.3, 1.3, 0.6);
+			draw_object_smooth();
+		glPopMatrix();
+		//Esteira esquerda.
+		glPushMatrix();
+			glColor3f(0.1, 0.1, 0.1);
+			glTranslatef(-0.55, 0, 0);
+			glScalef (0.3, 1.3, 0.6);
+			draw_object_smooth();
+		glPopMatrix();
 		//Parte de cima do tank.
 		glPushMatrix();
-			glColor3f(R - 0.1, G - 0.1, B - 0.1);
-			glTranslatef(0, 0, 0.25);
+			glColor3f(R - 0.5, G - 0.5, B - 0.5);
+			glTranslatef(0, 0, 0.5);
 			glScalef(0.6, 0.6, 0.7);
 			draw_object_smooth();
         glPopMatrix();
 		//Cano do tank.
 		glPushMatrix();
 			glTranslatef(0, 0.5, 0.3);
-			glScalef (0.3, 1.0, 0.25);
+			glScalef (0.3, 1.2, 0.3);
 			draw_object_smooth();
 		glPopMatrix();
     glPopMatrix();
