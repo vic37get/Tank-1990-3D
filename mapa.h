@@ -3,7 +3,6 @@
 #ifndef MAPA_H
 #define MAPA_H
 
-
 #include <cstdio>
 #include "bloco.h"
 #include "tank.h"
@@ -11,10 +10,7 @@
 #include "inimigo.h"
 #include "projetil.h"
 #include "bonus.h"
-//#define tamMapa 30
 #define tamMapa 15
-
-
 
 /*
 - Detalhamento do Mapa
@@ -28,20 +24,25 @@
 	- Parede externa: 7
 */
 
+bool startGame = false;
+bool gameOverAudio = false;
+bool explosion = false;
+bool atiraAudio = false;
+
 int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 2, 2, 2, 0, 0, 2, 6, 2, 0, 2, 2, 2, 2, 7},
-								{7, 3, 2, 2, 0, 0, 2, 2, 2, 0, 2, 5, 5, 5, 7},
+								{7, 2, 3, 2, 0, 0, 2, 2, 2, 0, 2, 5, 5, 5, 7},
 								{7, 5, 2, 2, 0, 0, 0, 0, 0, 0, 5, 5, 0, 5, 7},			
 								{7, 5, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7},
-								{7, 2, 0, 0, 0, 0, 2, 3, 3, 0, 1, 3, 1, 4, 7},
+								{7, 5, 5, 5, 0, 0, 2, 3, 3, 0, 1, 3, 1, 4, 7},
 								{7, 1, 1, 1, 0, 1, 1, 0, 2, 0, 1, 0, 0, 4, 7},	
-								{7, 4, 4, 4, 0, 3, 1, 4, 4, 1, 1, 4, 4, 4, 7},
+								{7, 4, 4, 4, 0, 3, 1, 4, 4, 0, 1, 4, 4, 4, 7},
 								{7, 5, 4, 2, 0, 2, 1, 1, 1, 0, 1, 2, 2, 4, 7},
 								{7, 4, 4, 3, 0, 3, 1, 0, 2, 0, 3, 3, 2, 4, 7},
 								{7, 4, 1, 1, 1, 1, 1, 0, 2, 2, 1, 1, 2, 3, 7},
 								{7, 4, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 2, 2, 7},
-								{7, 4, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 7},
-								{7, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 7},
+								{7, 0, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 7},
+								{7, 0, 0, 0, 3, 0, 0, 0, 2, 2, 2, 0, 0, 0, 7},
 								{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}
 }; 
  	
@@ -84,6 +85,27 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 		}
 	}
+	
+	if(startGame == false){
+		PlaySound("sounds/gamestart.wav", NULL, SND_ASYNC|SND_FILENAME);
+		startGame = true;
+	}
+	
+	if(gameOverAudio){
+		PlaySound("sounds/gameover.wav", NULL, SND_ASYNC|SND_FILENAME);
+		gameOverAudio = false;
+	}
+	
+	if(explosion){
+		PlaySound("sounds/explosion.wav", NULL, SND_ASYNC|SND_FILENAME);
+		explosion = false;
+	}
+	
+	if(atiraAudio){
+		PlaySound("sounds/fire.wav", NULL, SND_ASYNC|SND_FILENAME);
+		atiraAudio = false;
+	}
+	
 	//Se o jogador ainda estiver vivo, ele é desenhado.
 	if(jogador.vivo){
 		desenhaTank(jogador.x, jogador.y, jogador.direcaoCano, jogador.R, jogador.G, jogador.B);
@@ -100,7 +122,6 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 	if(inimigo3.vivo){
 		desenhaTank(inimigo3.x, inimigo3.y, inimigo3.direcaoCano, inimigo3.R, inimigo3.G, inimigo3.B);
 	}
-	bonusGun(5,4);
-	
+		
 }
 #endif
