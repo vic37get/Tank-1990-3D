@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="Yes" Tabpos="1" TopLine="1">
-			<Cursor Line="37" Column="1"/>
+		<File Name="main.cpp" Top="Yes" Tabpos="1" TopLine="81">
+			<Cursor Line="96" Column="19"/>
 		</File>
 		<File Name="projetil.h" Top="No" Tabpos="2" TopLine="1">
 			<Cursor Line="19" Column="1"/>
@@ -19,9 +19,8 @@
 			<Cursor Line="12" Column="18"/>
 			<Selection Line="12" Column="3"/>
 		</File>
-		<File Name="mapa.h" Top="No" Tabpos="6" TopLine="17">
-			<Cursor Line="111" Column="88"/>
-			<Selection Line="111" Column="36"/>
+		<File Name="mapa.h" Top="No" Tabpos="6" TopLine="74">
+			<Cursor Line="101" Column="21"/>
 		</File>
 	</Files>
 </Layout>
