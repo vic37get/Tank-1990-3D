@@ -42,15 +42,18 @@ bool bonus_boat = false;
 bool bonus_gun = false;
 bool bonus_wall = false;
 
+//Movimentos Inimigos
+int mov_inimigo1, mov_inimigo2, mov_inimigo3;
+
 //Instancia de Jogador.
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
 Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
 
 //Instancia de Inimigo.
 //x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
-Inimigo inimigo1 = {13, 13, 0.2, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo2 = {13, 6, 0.2, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo3 = {13, 1, 0.2, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo1 = {13, 13, 0.1, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo2 = {13, 6, 0.1, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo3 = {13, 1, 0.1, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 
 //CallBacks das funções.
 void init(void);
@@ -498,9 +501,7 @@ int gerarNumeroAleatorio(int min, int max) {
     return min + rand() % (max - min + 1);
 }
 
-void movimentaInimigo(Inimigo *inimigoAtual){
-	int movimento;
-	movimento = gerarNumeroAleatorio(1,4);
+void movimentaInimigo(Inimigo *inimigoAtual, int movimento){
 	switch(movimento){
 		case 1:
 			inimigoAtual->x += inimigoAtual->velocidade;
@@ -532,22 +533,33 @@ void movimentaInimigo(Inimigo *inimigoAtual){
 	colisaoBlocoMovimentoInimigo(movimento, inimigoAtual);
 }
 
+void sorteiaMovimento(int value){
+	mov_inimigo1 = gerarNumeroAleatorio(1,4);
+	mov_inimigo2 = gerarNumeroAleatorio(1,4);
+	mov_inimigo3 = gerarNumeroAleatorio(1,4);
+	
+	glutPostRedisplay();
+	glutTimerFunc(2000, sorteiaMovimento, 0);
+}
+
 void esperaMovimento(int value){
-	movimentaInimigo(&inimigo1);
+	//movimento = gerarNumeroAleatorio(1,4);
+	//distanciaMovimento = gerarNumeroAleatorio(1,10);
+	movimentaInimigo(&inimigo1, mov_inimigo1);
 	if (inimigo1.projetil.tiro != true && inimigo1.vivo == true){
 		inimigo1.projetil.tiro = true;
 		inimigo1.projetil.xOrigem = inimigo1.x;
 		inimigo1.projetil.yOrigem = inimigo1.y;
 		inimigo1.projetil.direcao = inimigo1.direcaoCano;
 	}
-	movimentaInimigo(&inimigo2);
+	movimentaInimigo(&inimigo2, mov_inimigo2);
 	if (inimigo2.projetil.tiro != true && inimigo2.vivo == true){
 		inimigo2.projetil.tiro = true;
 		inimigo2.projetil.xOrigem = inimigo2.x;
 		inimigo2.projetil.yOrigem = inimigo2.y;
 		inimigo2.projetil.direcao = inimigo2.direcaoCano;
 	}
-	movimentaInimigo(&inimigo3);
+	movimentaInimigo(&inimigo3, mov_inimigo3);
 	if (inimigo3.projetil.tiro != true && inimigo3.vivo == true){
 		inimigo3.projetil.tiro = true;
 		inimigo3.projetil.xOrigem = inimigo3.x;
@@ -555,7 +567,7 @@ void esperaMovimento(int value){
 		inimigo3.projetil.direcao = inimigo3.direcaoCano;
 	}
 	glutPostRedisplay();
-	glutTimerFunc(1000, esperaMovimento, 0);
+	glutTimerFunc(16, esperaMovimento, 0);
 }
 
 void specialKeyboard(int key, int x, int y){
@@ -724,6 +736,7 @@ int main(int argc, char** argv){
     glutTimerFunc(0, atiraInimigo, 0);
     glutTimerFunc(0, verificaStatus, 0);
     glutTimerFunc(15000, sorteiaBonus, 0);
+    glutTimerFunc(0, sorteiaMovimento, 0);
     init();
     
     glutMainLoop();
