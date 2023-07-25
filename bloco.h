@@ -49,6 +49,22 @@ const GLuint faces[N_FACES][3] = {
 	{3, 2, 1}
 };
 
+/* Coordenadas de textura dos vérices de cada triângulo */
+const GLfloat tex_coords[N_FACES][3][2] = {
+    {{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}},
+ 	{{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}},
+ 	{{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}},
+ 	{{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}},
+ 	{{0.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}},
+    {{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}}
+};
+
 // Vetores normais dos vertices do objeto
 GLfloat vertex_normals[N_VERTICES][3];
 
@@ -144,43 +160,23 @@ void calcularNormaisVertices(){
  * normais de cada vertice (ideal para usar com Gouraud shading).
  */
 void draw_object_smooth(void){
-    GLuint i;
-    calcularNormaisVertices();
+    GLuint i, j;
+    
     calcularNormaisFaces();
+    calcularNormaisVertices();
 
-    // Desenha todos os triangulos do objeto
+    /* Desenha todos os triângulos do objecto */
     glBegin(GL_TRIANGLES);
         for (i=0; i<N_FACES; i++){
-            glNormal3fv(vertex_normals[faces[i][0]]);
-            glVertex3fv(vertices[faces[i][0]]);
-
-            glNormal3fv(vertex_normals[faces[i][1]]);
-            glVertex3fv(vertices[faces[i][1]]);
-
-            glNormal3fv(vertex_normals[faces[i][2]]);
-            glVertex3fv(vertices[faces[i][2]]);
+            for (j=0; j<3; j++){
+               /* Define o vértice j da face i */
+               glTexCoord2fv(tex_coords[i][j]);
+               glNormal3fv(vertex_normals[faces[i][j]]);
+               glVertex3fv(vertices[faces[i][j]]);
+            }
         }
     glEnd();
 }
-
-/*
- * Desenha o objeto, triangulo por triangulo, utilizando um vetor
- * normal para cada triangulo (ideal para usar com Flat shading).
- */
-void draw_object_flat(void){
-    GLuint i;
-    calcularNormaisVertices();
-    calcularNormaisFaces();
-    glBegin(GL_TRIANGLES);
-        for (i=0; i<N_FACES; i++){
-            glNormal3fv(face_normals[i]);
-            glVertex3fv(vertices[faces[i][0]]);
-            glVertex3fv(vertices[faces[i][1]]);
-            glVertex3fv(vertices[faces[i][2]]);
-        }
-    glEnd();
-}
-
 
 void parede(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
@@ -193,7 +189,7 @@ void parede(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 
 void tijolo(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(1.0, 0.5, 0.0);
+		glColor3f(1.0, 0.6, 0.0);
 		glTranslatef (j*h+x, i*w+y, 0.5);
 		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
@@ -202,7 +198,7 @@ void tijolo(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 
 void metal(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(0.9, 0.9, 0.9);
+		glColor3f(1.0, 1.0, 1.0);
 		glTranslatef (j*h+x, i*w+y, 0.5);
 		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
@@ -240,7 +236,7 @@ void chao(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 
 void agua(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(0.0, 0.1, 1.0);
+		glColor3f(0.0, 0.0, 1.0);
 		glTranslatef (j*h+x, i*w+y, 0.1);
 		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();

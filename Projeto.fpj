@@ -29,6 +29,7 @@
 	<CompilerType Value="CPP"/>
 	<AppType Value="CONSOLE"/>
 	<Files>
+		<File Name="bonus.h"/>
 		<File Name="background.h"/>
 		<File Name="main.cpp"/>
 		<File Name="projetil.h"/>

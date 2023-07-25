@@ -37,9 +37,11 @@ bool game_over = false;
 bool bonus_ativo = false;
 int posicaoBonus, tipo_bonus;
 float bonusX, bonusY;
+int rotacaoBonus;
 bool bonus_boat = false;
 bool bonus_gun = false;
 bool bonus_wall = false;
+int anima_bonus = 0;
 float velocidade_bonus = 0;
 
 //Movimentos Inimigos
@@ -49,6 +51,7 @@ int mov_inimigo1, mov_inimigo2, mov_inimigo3;
 //X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
 Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
 float velocidade_inicial = jogador.velocidade;
+float jogadorXInicial = jogador.x, jogadorYInicial = jogador.y;
 
 //Instancia de Inimigo.
 //x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
@@ -66,13 +69,15 @@ void atira(int value);
 bool colidir(float jogadorX, float jogadorY, float tam_tank, float blocoX, float blocoY, float tam_bloco);
 void bonus();
 void aplicaBonus(int tipo_bonus);
+void textura();
 
 
 void init(void){
   glClearColor (0.4, 0.4, 0.4, 1.0);
-  glEnable(GL_DEPTH_TEST); // Algoritmo Z-Buffer
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+  glEnable(GL_DEPTH_TEST); // Habilita o algoritmo Z-Buffer
+  textura();
   // Ativa o modelo de sombreamento de Gouraud.
   glShadeModel(GL_SMOOTH);
 }
@@ -236,6 +241,11 @@ void colisaoTiroTanksInimigo(Inimigo *inimigoAtual, Jogador *player){
 				player->y = 99;
 				game_over = true;
 				gameOverAudio = true;
+			}
+			else{
+				player->x = jogadorXInicial;
+				player->y = jogadorYInicial;
+				
 			}
 	}
 	glutPostRedisplay();
@@ -566,8 +576,6 @@ void sorteiaMovimento(int value){
 }
 
 void esperaMovimento(int value){
-	//movimento = gerarNumeroAleatorio(1,4);
-	//distanciaMovimento = gerarNumeroAleatorio(1,10);
 	movimentaInimigo(&inimigo1, mov_inimigo1);
 	if (inimigo1.projetil.tiro != true && inimigo1.vivo == true){
 		inimigo1.projetil.tiro = true;
@@ -698,6 +706,31 @@ void aplicaBonus(int tipo_bonus){
 	}
 }
 
+void animacaoBonus(int value){
+	switch(anima_bonus){
+	case 0:
+		rotacaoBonus = 0;
+		anima_bonus = 1;
+		break;
+	case 1:
+		rotacaoBonus = 45;
+		anima_bonus = 2;
+		break;
+	case 2:
+		rotacaoBonus = 90;
+		anima_bonus = 3;
+		break;
+	case 3:
+		rotacaoBonus = 135;
+		anima_bonus = 0;
+		break;
+	default:
+		break;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(600, animacaoBonus,0);
+}
+
 //A cada 15 segundos sorteia um bonus em um lugar do mapa.
 void sorteiaBonus(int value){
 	if(bonus_ativo == false){
@@ -715,17 +748,17 @@ void bonus(){
 		case 1:
 			bonusX = 5;
 			bonusY = 4;
-			desenhaBonus(tipo_bonus, bonusX, bonusY);
+			desenhaBonus(tipo_bonus, bonusX, bonusY, rotacaoBonus);
 			break;
 		case 2:
 			bonusX = 4;
 			bonusY = 10;
-			desenhaBonus(tipo_bonus, bonusX, bonusY);
+			desenhaBonus(tipo_bonus, bonusX, bonusY, rotacaoBonus);
 			break;
 		case 3:
 			bonusX = 9;
 			bonusY = 7;
-			desenhaBonus(tipo_bonus, bonusX, bonusY);
+			desenhaBonus(tipo_bonus, bonusX, bonusY, rotacaoBonus);
 			break;
 		default:
 			break;
@@ -766,6 +799,7 @@ int main(int argc, char** argv){
     glutTimerFunc(0, verificaStatus, 0);
     glutTimerFunc(15000, sorteiaBonus, 0);
     glutTimerFunc(0, sorteiaMovimento, 0);
+    glutTimerFunc(0, animacaoBonus, 0);
     init();
     
     glutMainLoop();
