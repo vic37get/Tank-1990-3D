@@ -17,10 +17,18 @@
 #include "texturaArbusto.h"
 #include "texturaParede.h"
 #include "texturaChao.h"
+#include "texturaAguia.h"
+//bonus
+#include "texturaBonusGun.h"
+#include "texturaBonusStone.h"
+#include "texturaBonusLife.h"
+#include "texturaBonusSpeed.h"
+#include "texturaBonusBoat.h"
+
 #define tamMapa 15
 
 //Texturas
-#define QUANT_TEX 7
+#define QUANT_TEX 13
 unsigned int id_texturas[QUANT_TEX]; //nomes identificadores de textura
 
 void textura(){
@@ -58,12 +66,43 @@ void textura(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
-  glBindTexture(GL_TEXTURE_2D, id_texturas[6]); //Textura chao
+  glBindTexture(GL_TEXTURE_2D, id_texturas[6]); 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_chao, TEXTURE_chao, 0, GL_RGB, GL_UNSIGNED_BYTE, chao_data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
+  glBindTexture(GL_TEXTURE_2D, id_texturas[7]); 
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_aguia, TEXTURE_aguia, 0, GL_RGB, GL_UNSIGNED_BYTE, aguia_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  //Texturas dos bonus
+  glBindTexture(GL_TEXTURE_2D, id_texturas[8]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_gun, TEXTURE_bonus_gun, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_gun_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[9]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_stone, TEXTURE_bonus_stone, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_stone_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[10]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_life, TEXTURE_bonus_life, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_life_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[11]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_speed, TEXTURE_bonus_speed, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_speed_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[12]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_boat, TEXTURE_bonus_boat, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_boat_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   glEnable(GL_TEXTURE_2D);
 }
 
@@ -99,7 +138,50 @@ int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 0, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 7},
 								{7, 0, 0, 0, 3, 0, 0, 0, 2, 2, 2, 0, 0, 0, 7},
 								{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}
-}; 
+};
+
+void visualBonus(float i, float j, int rotacao){
+	glPushMatrix();
+		glColor3f(1.0, 1.0, 1.0);
+		glTranslatef (j*1, i*1, 0.5);
+		glScalef (0.8, 0.8, 0.8);
+		glRotatef(rotacao, 0.0, 0.0, 1.0);
+		draw_object_smooth();
+    glPopMatrix();
+}
+
+void desenhaBonus(int tipo_bonus, float i, float j, int rotacao){
+	switch(tipo_bonus){
+	case 1:
+		//Cria uma barreira de pedra ao redor da aguia.
+		glBindTexture(GL_TEXTURE_2D, id_texturas[9]);
+		visualBonus(i, j, rotacao);
+		break;
+	case 2:
+		glBindTexture(GL_TEXTURE_2D, id_texturas[10]);
+		//Adiciona uma vida ao jogador.
+		visualBonus(i, j, rotacao);
+		break;
+	case 3:
+		//Adiciona velocidade de movimento ao jogador e velocidade de tiro.
+		glBindTexture(GL_TEXTURE_2D, id_texturas[11]);
+		visualBonus(i, j, rotacao);
+		break;
+	case 4:
+		//Permite andar na água.
+		glBindTexture(GL_TEXTURE_2D, id_texturas[12]);
+		visualBonus(i, j, rotacao);
+		break;
+	case 5:
+		//Destroi blocos de metal.
+		glBindTexture(GL_TEXTURE_2D, id_texturas[8]);
+		visualBonus(i, j, rotacao);
+		break;
+	default:
+		break;
+	}
+	
+}
  	
 
 void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimigo3){
@@ -140,9 +222,8 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 			else if(mapa[i][j] == 6.0){
 				//Desenha a Aguia.
-				glDisable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, id_texturas[7]);
 				aguia(i, j, x, y, h, w);
-				glEnable(GL_TEXTURE_2D);
 			}
 			else if(mapa[i][j] == 7.0){
 				//Parede.
@@ -152,7 +233,6 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 		}
 	}
 	
-	glDisable(GL_TEXTURE_2D);
 	if(startGame == false){
 		PlaySound("sounds/gamestart.wav", NULL, SND_ASYNC|SND_FILENAME);
 		startGame = true;
@@ -172,6 +252,7 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 		PlaySound("sounds/fire.wav", NULL, SND_ASYNC|SND_FILENAME);
 		atiraAudio = false;
 	}
+	glDisable(GL_TEXTURE_2D);
 	
 	//Se o jogador ainda estiver vivo, ele é desenhado.
 	if(jogador.vivo){

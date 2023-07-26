@@ -71,7 +71,6 @@ void bonus();
 void aplicaBonus(int tipo_bonus);
 void textura();
 
-
 void init(void){
   glClearColor (0.4, 0.4, 0.4, 0.0);
   glEnable(GL_CULL_FACE);
@@ -85,6 +84,7 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
+    
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
     
     if(jogador.projetil.tiro && (game_over == false && game_win == false)){
@@ -707,25 +707,9 @@ void aplicaBonus(int tipo_bonus){
 }
 
 void animacaoBonus(int value){
-	switch(anima_bonus){
-	case 0:
+	rotacaoBonus+=45;
+	if(rotacaoBonus == 360){
 		rotacaoBonus = 0;
-		anima_bonus = 1;
-		break;
-	case 1:
-		rotacaoBonus = 45;
-		anima_bonus = 2;
-		break;
-	case 2:
-		rotacaoBonus = 90;
-		anima_bonus = 3;
-		break;
-	case 3:
-		rotacaoBonus = 135;
-		anima_bonus = 0;
-		break;
-	default:
-		break;
 	}
 	glutPostRedisplay();
 	glutTimerFunc(600, animacaoBonus,0);
@@ -789,7 +773,6 @@ int main(int argc, char** argv){
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_ambient_diffuse);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL); //Um ou mais parametros do material rastreiam a cor atual do glColor.
-
 
     // define a cor com a qual a tela sera apagada
     glClearColor (0.4, 0.4, 0.4, 0.0);
