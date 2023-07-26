@@ -180,7 +180,7 @@ void draw_object_smooth(void){
 
 void parede(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(0.3, 0.3, 0.3);
+		glColor3f(1.0, 1.0, 1.0);
 		glTranslatef (j*h+x, i*w+y, 0.5);
 		glScalef (tam_bloco, tam_bloco, tam_bloco);
 		draw_object_smooth();
@@ -227,7 +227,7 @@ void aguia(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 //Fazem parte do chão
 void chao(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(0.1, 0.1, 0.1);
+		glColor3f(0.01, 1.0, 0.0);
 		glTranslatef (j*h+x, i*w+y, 0.1);
 		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();
@@ -236,7 +236,7 @@ void chao(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 
 void agua(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
-		glColor3f(0.0, 0.0, 1.0);
+		glColor3f(0.0, 0.0, 0.9);
 		glTranslatef (j*h+x, i*w+y, 0.1);
 		glScalef (tam_bloco, tam_bloco, 0.1);
 		draw_object_smooth();

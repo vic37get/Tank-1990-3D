@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="154">
-			<Cursor Line="80" Column="60"/>
+		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="754">
+			<Cursor Line="770" Column="62"/>
 		</File>
-		<File Name="texturaTijolo.h" Top="No" Tabpos="3" TopLine="1">
-			<Cursor Line="2" Column="24"/>
+		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="92">
+			<Cursor Line="32" Column="18"/>
 		</File>
-		<File Name="mapa.h" Top="Yes" Tabpos="4" TopLine="4">
-			<Cursor Line="18" Column="47"/>
+		<File Name="bloco.h" Top="No" Tabpos="3" TopLine="135">
+			<Cursor Line="145" Column="20"/>
 		</File>
-		<File Name="bloco.h" Top="No" Tabpos="5" TopLine="167">
-			<Cursor Line="178" Column="13"/>
+		<File Name="texturaChao.h" Top="No" Tabpos="4" TopLine="1">
+			<Cursor Line="10" Column="179617"/>
+			<Selection Line="10" Column="2"/>
+		</File>
+		<File Name="texturaParede.h" Top="Yes" Tabpos="5" TopLine="1">
+			<Cursor Line="6" Column="52"/>
+		</File>
+		<File Name="texturaMetal.h" Top="No" Tabpos="6" TopLine="1">
+			<Cursor Line="7" Column="45"/>
+		</File>
+		<File Name="texturaTijolo.h" Top="No" Tabpos="7" TopLine="1">
+			<Cursor Line="8" Column="179617"/>
+			<Selection Line="8" Column="2"/>
 		</File>
 	</Files>
 </Layout>

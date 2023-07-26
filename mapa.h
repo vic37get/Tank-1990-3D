@@ -15,10 +15,12 @@
 #include "texturaMetal.h"
 #include "texturaGelo.h"
 #include "texturaArbusto.h"
+#include "texturaParede.h"
+#include "texturaChao.h"
 #define tamMapa 15
 
 //Texturas
-#define QUANT_TEX 5
+#define QUANT_TEX 7
 unsigned int id_texturas[QUANT_TEX]; //nomes identificadores de textura
 
 void textura(){
@@ -48,6 +50,16 @@ void textura(){
   
   glBindTexture(GL_TEXTURE_2D, id_texturas[4]); //Textura arbusto
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_arbusto, TEXTURE_arbusto, 0, GL_RGB, GL_UNSIGNED_BYTE, arbusto_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[5]); //Textura parede
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_parede, TEXTURE_parede, 0, GL_RGB, GL_UNSIGNED_BYTE, parede_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
+  glBindTexture(GL_TEXTURE_2D, id_texturas[6]); //Textura chao
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_chao, TEXTURE_chao, 0, GL_RGB, GL_UNSIGNED_BYTE, chao_data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
@@ -96,9 +108,8 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 		for (int j = 0; j < tamMapa; j++){
 			if (mapa[i][j] == 0.0){
 				//Desenha o Chão.
-				glDisable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, id_texturas[6]);
 				chao(i, j, x, y, h, w);
-				glEnable(GL_TEXTURE_2D);
 			}
 			else if(mapa[i][j] == 1.0){
 				//Desenha a Água.
@@ -122,20 +133,21 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 			else if(mapa[i][j] == 5.0){
 				//Desenha o gelo.
-				glBindTexture(GL_TEXTURE_2D, id_texturas[1]);
+				glDisable(GL_TEXTURE_2D);
+				//glBindTexture(GL_TEXTURE_2D, id_texturas[3]);
 				gelo(i, j, x, y, h, w);
+				glEnable(GL_TEXTURE_2D);
 			}
 			else if(mapa[i][j] == 6.0){
-				//Desenha o Aguia.
+				//Desenha a Aguia.
 				glDisable(GL_TEXTURE_2D);
 				aguia(i, j, x, y, h, w);
 				glEnable(GL_TEXTURE_2D);
 			}
 			else if(mapa[i][j] == 7.0){
-				//Tijolos Laterais.
-				glDisable(GL_TEXTURE_2D);
+				//Parede.
+				glBindTexture(GL_TEXTURE_2D, id_texturas[5]);
 				parede(i, j, x, y, h, w);
-				glEnable(GL_TEXTURE_2D);
 			}
 		}
 	}
