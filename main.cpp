@@ -312,7 +312,6 @@ void atiraInimigo(int value){
 	*/
 	
 	//Para o inimigo 1.
-	
     if (inimigo1.projetil.tiro) {
     	switch(inimigo1.projetil.direcao){
 			case 0:
@@ -707,12 +706,12 @@ void aplicaBonus(int tipo_bonus){
 }
 
 void animacaoBonus(int value){
-	rotacaoBonus+=45;
+	rotacaoBonus+=5;
 	if(rotacaoBonus == 360){
 		rotacaoBonus = 0;
 	}
 	glutPostRedisplay();
-	glutTimerFunc(600, animacaoBonus,0);
+	glutTimerFunc(16, animacaoBonus,0);
 }
 
 //A cada 15 segundos sorteia um bonus em um lugar do mapa.
