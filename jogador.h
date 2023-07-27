@@ -6,7 +6,10 @@
 typedef struct{
 	float x;
 	float y;
+	float xInicial;
+	float yInicial;
 	float velocidade;
+	float velocidadeInicial;
 	int direcaoCano;
 	float R;
 	float G;

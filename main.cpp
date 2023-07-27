@@ -25,6 +25,7 @@
 #include "jogador.h"
 #include "inimigo.h"
 #include "projetil.h"
+#include "audio.h"
 
 // Variaveis Globais
 int h, w = 0;
@@ -47,18 +48,19 @@ float velocidade_bonus = 0;
 //Movimentos Inimigos
 int mov_inimigo1, mov_inimigo2, mov_inimigo3;
 
+//TotalInimigos
+int total_inimigos = 9;
+
 //Instancia de Jogador.
-//X, Y, Velocidade, DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
-Jogador jogador = {1, 4, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
+//X, Y, Xinicial, Yinicial, Velocidade, Velocidade Inicial DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
+Jogador jogador = {1, 4, 1, 4, 0.1, 0.1, 0, 1.0, 1.0, 0.0, 3, true, {1, 4, 0.25f, 5.0f, 0, false}};
 float velocidade_inicial = jogador.velocidade;
-float jogadorXInicial = jogador.x, jogadorYInicial = jogador.y;
 
 //Instancia de Inimigo.
-//x, y, velocidade, direcaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
-Inimigo inimigo1 = {13, 13, 0.1, 180, 1.0, 0.0, 0.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo2 = {13, 6, 0.1, 180, 1.0, 0.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-Inimigo inimigo3 = {13, 1, 0.1, -90, 0.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
-float vel_inicialInimigo = inimigo1.velocidade;
+//X, Y, Xinicial, Yinicial, Velocidade, Velocidade Inicial DirecaoCano, R, G, B, vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
+Inimigo inimigo1 = {13, 13, 13, 13, 0.1, 0.1, 180, 0.9, 1.0, 0.9, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo2 = {13, 6, 13, 6, 0.1, 0.1, 180, 1.0, 0.9, 0.9, true, {13, 13, 0.25f, 5.0f, 0, false}};
+Inimigo inimigo3 = {13, 1, 13, 1, 0.1, 0.1, -90, 1.0, 1.0, 1.0, true, {13, 13, 0.25f, 5.0f, 0, false}};
 
 //CallBacks das funções.
 void init(void);
@@ -70,6 +72,7 @@ bool colidir(float jogadorX, float jogadorY, float tam_tank, float blocoX, float
 void bonus();
 void aplicaBonus(int tipo_bonus);
 void textura();
+void manipulaInimigoAtingido(Jogador *jogador, Inimigo *inimigo);
 
 void init(void){
   glClearColor (0.4, 0.4, 0.4, 0.0);
@@ -84,7 +87,7 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    
+    playAudio();
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
     
     if(jogador.projetil.tiro && (game_over == false && game_win == false)){
@@ -152,6 +155,10 @@ void colisaoTiroBlocoJogador(Jogador *jogador){
 							mapa[i][j] = 0;
 						}
 					}
+					else if((bonus_gun == false && mapa[i][j] == 3) || mapa[i][j] == 7){
+						audioHitMetal = true;
+					}
+					
 					//Se for tijolo.
 					if(mapa[i][j] == 2){
 						//Destroi o bloco.
@@ -159,6 +166,7 @@ void colisaoTiroBlocoJogador(Jogador *jogador){
 					}
 					if (mapa[i][j] == 6){
 						mapa[i][j] = 0;
+						explosion = true;
 						game_over = true;
 						gameOverAudio = true;
 					}
@@ -169,36 +177,39 @@ void colisaoTiroBlocoJogador(Jogador *jogador){
 	glutPostRedisplay();
 }
 
+
 void colisaoTiroTanksJogador(Jogador *jogador, Inimigo *primeiroInimigo, Inimigo *segundoInimigo, Inimigo *terceiroInimigo){
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, primeiroInimigo->x * 1.0, primeiroInimigo->y * 1.0, 1.0) == true){
-		primeiroInimigo->vivo = false;
-		//Remove do tabuleiro
-		primeiroInimigo->x = 99;
-		primeiroInimigo->y = 99;
-		jogador->projetil.tiro = false;
-		explosion = true;
+		manipulaInimigoAtingido(jogador, primeiroInimigo);
 	}
 	
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, segundoInimigo->x * 1.0, segundoInimigo->y * 1.0, 1.0) == true){
-		segundoInimigo->vivo = false;
-		//Remove do tabuleiro
-		segundoInimigo->x = 99;
-		segundoInimigo->y = 99;
-		jogador->projetil.tiro = false;
-		explosion = true;
+		manipulaInimigoAtingido(jogador, segundoInimigo);
 	}
 		
 	if (colidir(jogador->projetil.xOrigem, jogador->projetil.yOrigem, tam_projetil, terceiroInimigo->x * 1.0, terceiroInimigo->y * 1.0, 1.0) == true){
-		terceiroInimigo->vivo = false;
-		//Remove do tabuleiro
-		terceiroInimigo->x = 99;
-		terceiroInimigo->y = 99;
-		jogador->projetil.tiro = false;
-		explosion = true;
+		manipulaInimigoAtingido(jogador, terceiroInimigo);
 	}
 	glutPostRedisplay();
 }
-	
+
+void manipulaInimigoAtingido(Jogador *jogador, Inimigo *inimigo){
+	jogador->projetil.tiro = false;
+	explosion = true;
+	if(total_inimigos > 0){
+		inimigo->x = inimigo->xInicial;
+		inimigo->y = inimigo->yInicial;
+		total_inimigos--;
+		printf("Total Inimigos: %d\n", total_inimigos);
+	}
+	else{
+		//Remove do tabuleiro
+		inimigo->x = 99;
+		inimigo->y = 99;
+		inimigo->vivo = false;	
+	}
+}
+
 //************ COLISÕES DO INIMIGO ***********//
 
 void colisaoTiroBlocoInimigo(Inimigo *inimigoAtual){
@@ -230,22 +241,21 @@ void colisaoTiroTanksInimigo(Inimigo *inimigoAtual, Jogador *player){
 	if (colidir(inimigoAtual->projetil.xOrigem, inimigoAtual->projetil.yOrigem, tam_projetil, player->x * 1.0, player->y * 1.0, 1.0) == true){
 		inimigoAtual->projetil.tiro = false;
 			//Decrementa a vida do jogador em 1.
-			player->vida--;
 			//Se ficar com 0 vidas, game over.
 			printf("Vida: %d\n", player->vida);
-			if(player->vida == 0){
-				explosion = true;
-				player->vivo = false;
+			explosion = true;
+			if(player->vida > 0){
+				player->vida--;
+				player->x = player->xInicial;
+				player->y = player->yInicial;
+			}
+			else{
 				//Remove do tabuleiro
 				player->x = 99;
 				player->y = 99;
+				player->vivo = false;
 				game_over = true;
 				gameOverAudio = true;
-			}
-			else{
-				player->x = jogadorXInicial;
-				player->y = jogadorYInicial;
-				
 			}
 	}
 	glutPostRedisplay();
@@ -303,6 +313,48 @@ void atira(int value){
     glutTimerFunc(16, atira, 0);
 }
 
+void manipulaTiroInimigo(Jogador *jogador, Inimigo *inimigo){
+	if (inimigo->projetil.tiro) {
+    	switch(inimigo->projetil.direcao){
+			case 0:
+				inimigo->projetil.xOrigem += inimigo->projetil.velocidade;
+	        	if (inimigo->projetil.xOrigem > inimigo->x + inimigo->projetil.distancia){
+	            	inimigo->projetil.tiro = false;
+	            	inimigo->projetil.xOrigem = inimigo->x;
+	        	}
+				break;
+			
+			case 180:
+				inimigo->projetil.xOrigem -= inimigo->projetil.velocidade;
+				if (inimigo->projetil.xOrigem < inimigo->x - inimigo->projetil.distancia){
+		         	inimigo->projetil.tiro = false;
+		          	inimigo->projetil.xOrigem = inimigo->x;
+				}
+	        	break;
+   	     
+	        case -90:
+				inimigo->projetil.yOrigem += inimigo->projetil.velocidade;
+	        	if (inimigo->projetil.yOrigem > inimigo->y + inimigo->projetil.distancia){
+	            	inimigo->projetil.tiro = false;
+	            	inimigo->projetil.yOrigem = inimigo->y;
+	        	}
+	        	break;
+	        
+	        case 90:
+				inimigo->projetil.yOrigem -= inimigo->projetil.velocidade;
+	        	if (inimigo->projetil.yOrigem < inimigo->y - inimigo->projetil.distancia){
+	            	inimigo->projetil.tiro = false;
+	            	inimigo->projetil.yOrigem = inimigo->y;
+	        	}
+	        	break;
+	        
+			default:
+				break;
+		}
+		colisaoTiroBlocoInimigo(inimigo);
+		colisaoTiroTanksInimigo(inimigo, jogador);
+    }
+}
 
 void atiraInimigo(int value){
 	/*
@@ -310,132 +362,15 @@ void atiraInimigo(int value){
 	*inimigo.projetil.tiro verifica se o tiro foi efetuado.
 	*inimigo.projetil.direcao é a variavel que armazena a direção do tiro.
 	*/
-	
 	//Para o inimigo 1.
-    if (inimigo1.projetil.tiro) {
-    	switch(inimigo1.projetil.direcao){
-			case 0:
-				inimigo1.projetil.xOrigem += inimigo1.projetil.velocidade;
-	        	if (inimigo1.projetil.xOrigem > inimigo1.x + inimigo1.projetil.distancia){
-	            	inimigo1.projetil.tiro = false;
-	            	inimigo1.projetil.xOrigem = inimigo1.x;
-	        	}
-				break;
-			
-			case 180:
-				inimigo1.projetil.xOrigem -= inimigo1.projetil.velocidade;
-				if (inimigo1.projetil.xOrigem < inimigo1.x - inimigo1.projetil.distancia){
-		         	inimigo1.projetil.tiro = false;
-		          	inimigo1.projetil.xOrigem = inimigo1.x;
-				}
-	        	break;
-   	     
-	        case -90:
-				inimigo1.projetil.yOrigem += inimigo1.projetil.velocidade;
-	        	if (inimigo1.projetil.yOrigem > inimigo1.y + inimigo1.projetil.distancia){
-	            	inimigo1.projetil.tiro = false;
-	            	inimigo1.projetil.yOrigem = inimigo1.y;
-	        	}
-	        	break;
-	        
-	        case 90:
-				inimigo1.projetil.yOrigem -= inimigo1.projetil.velocidade;
-	        	if (inimigo1.projetil.yOrigem < inimigo1.y - inimigo1.projetil.distancia){
-	            	inimigo1.projetil.tiro = false;
-	            	inimigo1.projetil.yOrigem = inimigo1.y;
-	        	}
-	        	break;
-	        
-			default:
-				break;
-		}
-		colisaoTiroBlocoInimigo(&inimigo1);
-		colisaoTiroTanksInimigo(&inimigo1, &jogador);
-    }
+    manipulaTiroInimigo(&jogador, &inimigo1);
     
     //Para o inimigo 2.
-    if (inimigo2.projetil.tiro) {
-    	switch(inimigo2.projetil.direcao){
-			case 0:
-				inimigo2.projetil.xOrigem += inimigo2.projetil.velocidade;
-	        	if (inimigo2.projetil.xOrigem > inimigo2.x + inimigo2.projetil.distancia){
-	            	inimigo2.projetil.tiro = false;
-	            	inimigo2.projetil.xOrigem = inimigo2.x;
-	        	}
-				break;
-			
-			case 180:
-				inimigo2.projetil.xOrigem -= inimigo2.projetil.velocidade;
-				if (inimigo2.projetil.xOrigem < inimigo2.x - inimigo2.projetil.distancia){
-		         	inimigo2.projetil.tiro = false;
-		          	inimigo2.projetil.xOrigem = inimigo2.x;
-				}
-	        	break;
-   	     
-	        case -90:
-				inimigo2.projetil.yOrigem += inimigo2.projetil.velocidade;
-	        	if (inimigo2.projetil.yOrigem > inimigo2.y + inimigo2.projetil.distancia){
-	            	inimigo2.projetil.tiro = false;
-	            	inimigo2.projetil.yOrigem = inimigo2.y;
-	        	}
-	        	break;
-	        
-	        case 90:
-				inimigo2.projetil.yOrigem -= inimigo2.projetil.velocidade;
-	        	if (inimigo2.projetil.yOrigem < inimigo2.y - inimigo2.projetil.distancia){
-	            	inimigo2.projetil.tiro = false;
-	            	inimigo2.projetil.yOrigem = inimigo2.y;
-	        	}
-	        	break;
-	        
-			default:
-				break;
-		}
-		colisaoTiroBlocoInimigo(&inimigo2);
-		colisaoTiroTanksInimigo(&inimigo2, &jogador);
-    }
+    manipulaTiroInimigo(&jogador, &inimigo2);
     
     //Para o inimigo 3.
-    if (inimigo3.projetil.tiro) {
-    	switch(inimigo3.projetil.direcao){
-			case 0:
-				inimigo3.projetil.xOrigem += inimigo3.projetil.velocidade;
-	        	if (inimigo3.projetil.xOrigem > inimigo3.x + inimigo3.projetil.distancia){
-	            	inimigo3.projetil.tiro = false;
-	            	inimigo3.projetil.xOrigem = inimigo3.x;
-	        	}
-				break;
-			
-			case 180:
-				inimigo3.projetil.xOrigem -= inimigo3.projetil.velocidade;
-				if (inimigo3.projetil.xOrigem < inimigo3.x - inimigo3.projetil.distancia){
-		         	inimigo3.projetil.tiro = false;
-		          	inimigo3.projetil.xOrigem = inimigo3.x;
-				}
-	        	break;
-   	     
-	        case -90:
-				inimigo3.projetil.yOrigem += inimigo3.projetil.velocidade;
-	        	if (inimigo3.projetil.yOrigem > inimigo3.y + inimigo3.projetil.distancia){
-	            	inimigo3.projetil.tiro = false;
-	            	inimigo3.projetil.yOrigem = inimigo3.y;
-	        	}
-	        	break;
-	        
-	        case 90:
-				inimigo3.projetil.yOrigem -= inimigo3.projetil.velocidade;
-	        	if (inimigo3.projetil.yOrigem < inimigo3.y - inimigo3.projetil.distancia){
-	            	inimigo3.projetil.tiro = false;
-	            	inimigo3.projetil.yOrigem = inimigo3.y;
-	        	}
-	        	break;
-	        
-			default:
-				break;
-		}
-		colisaoTiroBlocoInimigo(&inimigo3);
-		colisaoTiroTanksInimigo(&inimigo3, &jogador);
-    }
+    manipulaTiroInimigo(&jogador, &inimigo3);
+    
     //Atualiza o tiro 60 frames por segundo, fazendo a animação da bala.
     glutPostRedisplay();
     glutTimerFunc(16, atiraInimigo, 0);
@@ -485,11 +420,11 @@ void colisaoBlocoMovimentoJogador(unsigned char key, Jogador *jogador){
 				}
 				//Andar mais rápido no gelo.
 				if(mapa[i][j] == 5){
-					jogador->velocidade = velocidade_inicial*2;
+					jogador->velocidade = jogador->velocidadeInicial*1.5;
 				}
 				else{
-					if(velocidade_inicial > velocidade_bonus){
-						jogador->velocidade = velocidade_inicial;
+					if(jogador->velocidadeInicial > velocidade_bonus){
+						jogador->velocidade = jogador->velocidadeInicial;
 					}
 					else{
 						jogador->velocidade = velocidade_bonus;	
@@ -498,8 +433,7 @@ void colisaoBlocoMovimentoJogador(unsigned char key, Jogador *jogador){
 				//Obter um bônus no mapa.
 				if(bonus_ativo == true && bonusX == i && bonusY == j){
 					bonus_ativo = false;
-					printf("PEGOU O BONUS!\n");
-					printf("TIPO BONUS: %d\n", tipo_bonus);
+					audioPegaBonus = true;
 					aplicaBonus(tipo_bonus);
 				}
 			}
@@ -519,10 +453,10 @@ void colisaoBlocoMovimentoInimigo(int movimentoInimigo, Inimigo *inimigoAtual){
 				}
 				//Anda mais rápido no gelo.
 				if(mapa[i][j] == 5){
-					inimigoAtual->velocidade = vel_inicialInimigo + (vel_inicialInimigo/2);
+					inimigoAtual->velocidade = inimigoAtual->velocidadeInicial + (inimigoAtual->velocidadeInicial/2);
 				}
 				else{
-					inimigoAtual->velocidade = vel_inicialInimigo;
+					inimigoAtual->velocidade = inimigoAtual->velocidadeInicial;
 				}
 			}
 		}
@@ -684,6 +618,7 @@ void aplicaBonus(int tipo_bonus){
 		break;
 	case 2:
 		jogador.vida++;
+		audioLife = true;
 		printf("Uma vida a mais, Vidas: %d", jogador.vida);
 		break;
 	case 3:
@@ -717,6 +652,7 @@ void animacaoBonus(int value){
 //A cada 15 segundos sorteia um bonus em um lugar do mapa.
 void sorteiaBonus(int value){
 	if(bonus_ativo == false){
+		audioApareceBonus = true;
 		posicaoBonus = gerarNumeroAleatorio(1, 3);
 		tipo_bonus = gerarNumeroAleatorio(1, 5);
 		bonus_ativo = true;

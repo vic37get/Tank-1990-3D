@@ -5,31 +5,35 @@
 
 #include <cstdio>
 #include "bloco.h"
-#include "tank.h"
 #include "jogador.h"
 #include "inimigo.h"
 #include "projetil.h"
 #include "bonus.h"
-#include "texturaTijolo.h"
-#include "texturaAgua.h"
-#include "texturaMetal.h"
-#include "texturaGelo.h"
-#include "texturaArbusto.h"
-#include "texturaParede.h"
-#include "texturaChao.h"
-#include "texturaAguia.h"
-//bonus
-#include "texturaBonusGun.h"
-#include "texturaBonusStone.h"
-#include "texturaBonusLife.h"
-#include "texturaBonusSpeed.h"
-#include "texturaBonusBoat.h"
+#include "audio.h"
+
+//Texturas dos blocos
+#include "texturas/texturaTijolo.h"
+#include "texturas/texturaAgua.h"
+#include "texturas/texturaMetal.h"
+#include "texturas/texturaGelo.h"
+#include "texturas/texturaArbusto.h"
+#include "texturas/texturaParede.h"
+#include "texturas/texturaChao.h"
+#include "texturas/texturaAguia.h"
+//Texturas dos bonus
+#include "texturas/texturaBonusGun.h"
+#include "texturas/texturaBonusStone.h"
+#include "texturas/texturaBonusLife.h"
+#include "texturas/texturaBonusSpeed.h"
+#include "texturas/texturaBonusBoat.h"
+#include "texturas/texturaTank.h"
 
 #define tamMapa 15
 
 //Texturas
-#define QUANT_TEX 13
-unsigned int id_texturas[QUANT_TEX]; //nomes identificadores de textura
+#define QUANT_TEX 14
+float tam_tank = 0.8;
+unsigned int id_texturas[14]; //nomes identificadores de textura
 
 void textura(){
 	
@@ -75,6 +79,7 @@ void textura(){
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_aguia, TEXTURE_aguia, 0, GL_RGB, GL_UNSIGNED_BYTE, aguia_data);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
   
   //Texturas dos bonus
   glBindTexture(GL_TEXTURE_2D, id_texturas[8]);
@@ -102,6 +107,13 @@ void textura(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
+  
+  //Textura do Tank
+  glBindTexture(GL_TEXTURE_2D, id_texturas[13]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_tank, TEXTURE_tank, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_tank_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   glEnable(GL_TEXTURE_2D);
 }
@@ -118,16 +130,11 @@ void textura(){
 	- Parede externa: 7
 */
 
-bool startGame = false;
-bool gameOverAudio = false;
-bool explosion = false;
-bool atiraAudio = false;
-
 int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 2, 2, 2, 0, 0, 2, 6, 2, 0, 2, 2, 2, 2, 7},
 								{7, 2, 3, 2, 0, 0, 2, 2, 2, 0, 2, 5, 5, 5, 7},
-								{7, 5, 2, 2, 0, 0, 0, 0, 0, 0, 5, 5, 0, 5, 7},			
-								{7, 5, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7},
+								{7, 5, 2, 2, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 7},			
+								{7, 5, 3, 2, 0, 0, 0, 0, 0, 0, 5, 0, 0, 4, 7},
 								{7, 5, 5, 5, 5, 0, 2, 3, 3, 0, 1, 3, 1, 4, 7},
 								{7, 1, 1, 1, 5, 1, 1, 0, 2, 0, 1, 0, 0, 4, 7},	
 								{7, 4, 4, 4, 5, 3, 1, 4, 4, 0, 1, 4, 4, 4, 7},
@@ -139,16 +146,6 @@ int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 0, 0, 0, 3, 0, 0, 0, 2, 2, 2, 0, 0, 0, 7},
 								{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}
 };
-
-void visualBonus(float i, float j, int rotacao){
-	glPushMatrix();
-		glColor3f(1.0, 1.0, 1.0);
-		glTranslatef (j*1, i*1, 0.5);
-		glScalef (0.8, 0.8, 0.8);
-		glRotatef(rotacao, 0.0, 0.0, 1.0);
-		draw_object_smooth();
-    glPopMatrix();
-}
 
 void desenhaBonus(int tipo_bonus, float i, float j, int rotacao){
 	switch(tipo_bonus){
@@ -181,6 +178,47 @@ void desenhaBonus(int tipo_bonus, float i, float j, int rotacao){
 		break;
 	}
 	
+}
+
+void desenhaTank(float i, float j, int direcao, int R, int G, int B){
+	//Corpo do tank.
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, id_texturas[13]);
+		glColor3f(R, G, B);
+		glTranslatef (j*1, i*1, 0.5);
+		glScalef (tam_tank, tam_tank, 0.5);
+		draw_object_smooth();
+		glRotatef(direcao, 0.0 , 0.0 , 1.0);
+		glDisable(GL_TEXTURE_2D);
+		//Esteira direita.
+		glPushMatrix();
+			glColor3f(0.1, 0.1, 0.1);
+			glTranslatef(0.55, 0, 0);
+			glScalef (0.3, 1.3, 0.6);
+			draw_object_smooth();
+		glPopMatrix();
+		//Esteira esquerda.
+		glPushMatrix();
+			glColor3f(0.1, 0.1, 0.1);
+			glTranslatef(-0.55, 0, 0);
+			glScalef (0.3, 1.3, 0.6);
+			draw_object_smooth();
+		glPopMatrix();
+		glEnable(GL_TEXTURE_2D);
+		//Parte de cima do tank.
+		glPushMatrix();
+			glColor3f(R - 0.5, G - 0.5, B - 0.5);
+			glTranslatef(0, 0, 0.5);
+			glScalef(0.6, 0.6, 0.7);
+			draw_object_smooth();
+        glPopMatrix();
+		//Cano do tank.
+		glPushMatrix();
+			glTranslatef(0, 0.5, 0.3);
+			glScalef (0.3, 1.2, 0.3);
+			draw_object_smooth();
+		glPopMatrix();
+    glPopMatrix();
 }
  	
 
@@ -215,10 +253,8 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 			}
 			else if(mapa[i][j] == 5.0){
 				//Desenha o gelo.
-				glDisable(GL_TEXTURE_2D);
-				//glBindTexture(GL_TEXTURE_2D, id_texturas[3]);
+				glBindTexture(GL_TEXTURE_2D, id_texturas[3]);
 				gelo(i, j, x, y, h, w);
-				glEnable(GL_TEXTURE_2D);
 			}
 			else if(mapa[i][j] == 6.0){
 				//Desenha a Aguia.
@@ -233,28 +269,8 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 		}
 	}
 	
-	if(startGame == false){
-		PlaySound("sounds/gamestart.wav", NULL, SND_ASYNC|SND_FILENAME);
-		startGame = true;
-	}
-	
-	if(gameOverAudio){
-		PlaySound("sounds/gameover.wav", NULL, SND_ASYNC|SND_FILENAME);
-		gameOverAudio = false;
-	}
-	
-	if(explosion){
-		PlaySound("sounds/explosion.wav", NULL, SND_ASYNC|SND_FILENAME);
-		explosion = false;
-	}
-	
-	if(atiraAudio){
-		PlaySound("sounds/fire.wav", NULL, SND_ASYNC|SND_FILENAME);
-		atiraAudio = false;
-	}
-	glDisable(GL_TEXTURE_2D);
-	
 	//Se o jogador ainda estiver vivo, ele é desenhado.
+	
 	if(jogador.vivo){
 		desenhaTank(jogador.x, jogador.y, jogador.direcaoCano, jogador.R, jogador.G, jogador.B);
 	}
@@ -270,6 +286,6 @@ void criaMapa(Jogador jogador, Inimigo inimigo1, Inimigo inimigo2, Inimigo inimi
 	if(inimigo3.vivo){
 		desenhaTank(inimigo3.x, inimigo3.y, inimigo3.direcaoCano, inimigo3.R, inimigo3.G, inimigo3.B);
 	}
-	glEnable(GL_TEXTURE_2D);
+
 }
 #endif
