@@ -26,6 +26,11 @@
 #include "inimigo.h"
 #include "projetil.h"
 #include "audio.h"
+#include "textos.h"
+#include <sstream>
+using std::stringstream;
+#include <string>
+using std::string;
 
 // Variaveis Globais
 int h, w = 0;
@@ -49,7 +54,8 @@ float velocidade_bonus = 0;
 int mov_inimigo1, mov_inimigo2, mov_inimigo3;
 
 //TotalInimigos
-int total_inimigos = 9;
+int total_inimigos = 4; //Quantas vezes o inimigo pode respawnar.
+int vidas_inimigos = 7; //O total de vidas dos inimigos.
 
 //Instancia de Jogador.
 //X, Y, Xinicial, Yinicial, Velocidade, Velocidade Inicial DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
@@ -88,7 +94,10 @@ void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
     playAudio();
+    background();
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
+    desenhaVidasJogador(jogador.vida);
+    desenhaVidasInimigo(vidas_inimigos);
     
     if(jogador.projetil.tiro && (game_over == false && game_win == false)){
 		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
@@ -166,7 +175,7 @@ void colisaoTiroBlocoJogador(Jogador *jogador){
 					}
 					if (mapa[i][j] == 6){
 						mapa[i][j] = 0;
-						explosion = true;
+						//explosion = true;
 						game_over = true;
 						gameOverAudio = true;
 					}
@@ -200,10 +209,12 @@ void manipulaInimigoAtingido(Jogador *jogador, Inimigo *inimigo){
 		inimigo->x = inimigo->xInicial;
 		inimigo->y = inimigo->yInicial;
 		total_inimigos--;
+		vidas_inimigos--;
 		printf("Total Inimigos: %d\n", total_inimigos);
 	}
 	else{
 		//Remove do tabuleiro
+		vidas_inimigos--;
 		inimigo->x = 99;
 		inimigo->y = 99;
 		inimigo->vivo = false;	

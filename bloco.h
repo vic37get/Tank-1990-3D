@@ -178,6 +178,14 @@ void draw_object_smooth(void){
     glEnd();
 }
 
+void blocoVida(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
+	glPushMatrix();
+		glTranslatef (j*h+x, i*w+y, 0.5);
+		glScalef (0.5, 0.5, 0.5);
+		glutSolidSphere(0.8 , 50, 50);
+    glPopMatrix();
+}
+
 void parede(int i, int j, GLfloat x, GLfloat y, GLfloat h, GLfloat w){
 	glPushMatrix();
 		glColor3f(1.0, 1.0, 1.0);

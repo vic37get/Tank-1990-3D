@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="36">
-			<Cursor Line="61" Column="65"/>
+		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="656">
+			<Cursor Line="673" Column="2"/>
 		</File>
-		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="177">
-			<Cursor Line="192" Column="28"/>
-		</File>
-		<File Name="bloco.h" Top="No" Tabpos="3" TopLine="1">
-			<Cursor Line="248" Column="16"/>
-		</File>
-		<File Name="bonus.h" Top="Yes" Tabpos="4" TopLine="1">
-			<Cursor Line="11" Column="2"/>
-		</File>
-		<File Name="jogador.h" Top="No" Tabpos="5" TopLine="1">
-			<Cursor Line="12" Column="26"/>
-		</File>
-		<File Name="inimigo.h" Top="No" Tabpos="6" TopLine="1">
-			<Cursor Line="9" Column="17"/>
+		<File Name="mapa.h" Top="Yes" Tabpos="2" TopLine="282">
+			<Cursor Line="291" Column="50"/>
 		</File>
 	</Files>
 </Layout>

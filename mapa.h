@@ -10,6 +10,11 @@
 #include "projetil.h"
 #include "bonus.h"
 #include "audio.h"
+#include <sstream>
+using std::stringstream;
+#include <string>
+using std::string;
+
 
 //Texturas dos blocos
 #include "texturas/texturaTijolo.h"
@@ -27,13 +32,17 @@
 #include "texturas/texturaBonusSpeed.h"
 #include "texturas/texturaBonusBoat.h"
 #include "texturas/texturaTank.h"
+#include "texturas/texturaFundo.h"
+
+
 
 #define tamMapa 15
 
 //Texturas
 #define QUANT_TEX 14
+int coluna = 0;
 float tam_tank = 0.8;
-unsigned int id_texturas[14]; //nomes identificadores de textura
+unsigned int id_texturas[15]; //nomes identificadores de textura
 
 void textura(){
 	
@@ -114,6 +123,13 @@ void textura(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
+  
+  //Textura do Background
+  glBindTexture(GL_TEXTURE_2D, id_texturas[14]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_fundo, TEXTURE_fundo, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_fundo_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   glEnable(GL_TEXTURE_2D);
 }
@@ -139,13 +155,42 @@ int mapa[tamMapa][tamMapa] =   {{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 								{7, 1, 1, 1, 5, 1, 1, 0, 2, 0, 1, 0, 0, 4, 7},	
 								{7, 4, 4, 4, 5, 3, 1, 4, 4, 0, 1, 4, 4, 4, 7},
 								{7, 5, 4, 2, 5, 2, 1, 1, 1, 0, 1, 2, 2, 4, 7},
-								{7, 4, 4, 3, 5, 3, 1, 0, 2, 0, 3, 3, 2, 4, 7},
+								{7, 4, 4, 3, 0, 3, 1, 0, 2, 0, 3, 3, 2, 4, 7},
 								{7, 4, 1, 1, 1, 1, 1, 0, 2, 2, 1, 1, 2, 3, 7},
 								{7, 4, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 2, 2, 7},
 								{7, 0, 2, 2, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 7},
 								{7, 0, 0, 0, 3, 0, 0, 0, 2, 2, 2, 0, 0, 0, 7},
 								{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}
 };
+
+// Plano de fundo
+void background(){
+	glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+        glLoadIdentity();
+		glOrtho(0,1,0,1,-1,1);
+
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+		glDepthMask(GL_FALSE);
+		
+		glBindTexture(GL_TEXTURE_2D, id_texturas[14]);
+        glBegin(GL_QUADS);
+        	glColor3f(1.0, 1.0, 1.0);
+			glTexCoord2i(0, 0); glVertex2i(-1,-1);
+        	glTexCoord2i(1, 0); glVertex2i( 1,-1);
+        	glTexCoord2i(1, 1); glVertex2i( 1, 1);
+        	glTexCoord2i(0, 1); glVertex2i(-1, 1);
+        glEnd();
+        
+        glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
+		glDepthMask(GL_TRUE);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
+
 
 void desenhaBonus(int tipo_bonus, float i, float j, int rotacao){
 	switch(tipo_bonus){
