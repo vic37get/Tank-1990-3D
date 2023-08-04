@@ -1,6 +1,7 @@
 //Implementa as coisas reltivas ao audio
 #ifndef AUDIO_H
 #define AUDIO_H
+#include <mmsystem.h>
 
 bool startGame = false;
 bool gameOverAudio = false;
@@ -13,43 +14,43 @@ bool audioHitMetal = false;
 
 void playAudio(){
 	if(startGame == false){
-		PlaySound("sounds/gamestart.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/gamestart.wav", NULL, 0, NULL);
 		startGame = true;
 	}
 	
 	if(audioLife){
-		PlaySound("sounds/life.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/life.wav", NULL, 0, NULL);
 		audioLife = false;
 		audioPegaBonus = false;
 	}
 	
 	if(audioHitMetal){
-		PlaySound("sounds/hitMetal.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/hitMetal.wav", NULL, 0, NULL);
 		audioHitMetal = false;
 	}
 	
 	if(audioPegaBonus){
-		PlaySound("sounds/pegaBonus.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/pegaBonus.wav", NULL, 0, NULL);
 		audioPegaBonus = false;
 	}
 	
 	if(audioApareceBonus){
-		PlaySound("sounds/bonusAparecendo.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/bonusAparecendo.wav", NULL, 0, NULL);
 		audioApareceBonus = false;
 	}
 	
 	if(gameOverAudio){
-		PlaySound("sounds/gameover.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/gameover.wav", NULL, 0, NULL);
 		gameOverAudio = false;
 	}
 	
 	if(explosion){
-		PlaySound("sounds/explosion.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/explosion.wav", NULL, 0, NULL);
 		explosion = false;
 	}
 	
 	if(atiraAudio){
-		PlaySound("sounds/fire.wav", NULL, SND_ASYNC|SND_FILENAME);
+		mciSendString("play sounds/fire.wav", NULL, 0, NULL);
 		atiraAudio = false;
 	}
 }

@@ -19,7 +19,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-
 #include <mmsystem.h>
 #include "mapa.h"
 #include "jogador.h"
