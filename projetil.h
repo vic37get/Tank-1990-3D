@@ -20,6 +20,7 @@ typedef struct{
 
 void desenhaProjetil(float xOrigem, float yOrigem, int direcao){
 	//Projetil inteiro.
+	glDisable(GL_TEXTURE_2D);
 	glPushMatrix();
 		glColor3f(1.0, 0.5, 0.0);
 		glTranslatef (yOrigem*1, xOrigem*1, 0.5);
@@ -34,5 +35,6 @@ void desenhaProjetil(float xOrigem, float yOrigem, int direcao){
 			glutSolidCube(1.0);
 		glPopMatrix();
     glPopMatrix();
+    glEnable(GL_TEXTURE_2D);
 }
 #endif

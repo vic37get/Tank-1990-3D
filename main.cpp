@@ -132,7 +132,7 @@ void keyboard (unsigned char key, int x, int y){
 		case 'Q':
 			if(game_over == false && game_win == false){
 				if (jogador.projetil.tiro != true){
-					PlaySound("sounds/fire.wav", NULL, SND_ASYNC);
+					mciSendString("play sounds/fire.wav", NULL, 0, NULL);
 					jogador.projetil.tiro = true;
 					jogador.projetil.xOrigem = jogador.x;
 					jogador.projetil.yOrigem = jogador.y;
