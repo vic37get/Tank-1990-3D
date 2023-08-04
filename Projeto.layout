@@ -2,10 +2,10 @@
 <Layout>
 	<Files>
 		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="656">
-			<Cursor Line="673" Column="2"/>
+			<Cursor Line="668" Column="43"/>
 		</File>
 		<File Name="mapa.h" Top="Yes" Tabpos="2" TopLine="282">
-			<Cursor Line="291" Column="50"/>
+			<Cursor Line="292" Column="29"/>
 		</File>
 	</Files>
 </Layout>
