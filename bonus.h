@@ -1,4 +1,12 @@
 //Visual do bonus
+bool bonus_boat = false;
+bool bonus_gun = false;
+bool bonus_wall = false;
+bool bonus_vida = false;
+bool bonus_estrela = false;
+
+
+int qtd_bonus_ativos = 0;
 
 void visualBonus(float i, float j, int rotacao){
 	glPushMatrix();

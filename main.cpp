@@ -43,9 +43,6 @@ bool bonus_ativo = false;
 int posicaoBonus, tipo_bonus;
 float bonusX, bonusY;
 int rotacaoBonus;
-bool bonus_boat = false;
-bool bonus_gun = false;
-bool bonus_wall = false;
 int anima_bonus = 0;
 float velocidade_bonus = 0;
 
@@ -53,8 +50,8 @@ float velocidade_bonus = 0;
 int mov_inimigo1, mov_inimigo2, mov_inimigo3;
 
 //TotalInimigos
-int total_inimigos = 4; //Quantas vezes o inimigo pode respawnar.
-int vidas_inimigos = 7; //O total de vidas dos inimigos.
+int total_inimigos = 3; //Quantas vezes o inimigo pode respawnar.
+int vidas_inimigos = 6; //O total de vidas dos inimigos.
 
 //Instancia de Jogador.
 //X, Y, Xinicial, Yinicial, Velocidade, Velocidade Inicial DirecaoCano, R, G, B, Vidas, Vivo. Projetil{ x, y, velocidade, distancia, direcao, tiro.}
@@ -97,6 +94,7 @@ void display(){
     criaMapa(jogador, inimigo1, inimigo2, inimigo3);
     desenhaVidasJogador(jogador.vida);
     desenhaVidasInimigo(vidas_inimigos);
+    desenhaPlacarBonus();
     
     if(jogador.projetil.tiro && (game_over == false && game_win == false)){
 		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
@@ -121,8 +119,8 @@ void reshape (int w, int h){
     glLoadIdentity();
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
     gluPerspective(45, (float)w/(float)h, 1.0, 100.0);
-    gluLookAt(8.0,-5.0,15.0, 	// posição da câmera (olho) 
-			  8.0,6.0,0.0, 	// centro da cena
+    gluLookAt(9.0,-5.0,15.0, 	// posição da câmera (olho) 
+			  9.0,6.0,0.0, 	// centro da cena
 			  0.0,1.0,0.0);
     glMatrixMode (GL_MODELVIEW);
 }
@@ -592,6 +590,7 @@ void verificaStatus(int value){
 void bonusWall(int value){
 	if(bonus_wall){
 		bonus_wall = false;
+		qtd_bonus_ativos--;
 		if(mapa[2][6] == 3){
 			mapa[2][6] = 2;
 		}
@@ -616,6 +615,9 @@ void bonusWall(int value){
 void aplicaBonus(int tipo_bonus){
 	switch(tipo_bonus){
 	case 1:
+		if (bonus_wall != true){
+			qtd_bonus_ativos++;
+		}
 		bonus_wall = true;
 		printf("Paredes reforçadas para a aguia!\n");
 		mapa[2][6] = 3;
@@ -627,21 +629,35 @@ void aplicaBonus(int tipo_bonus){
 		glutPostRedisplay();
 		break;
 	case 2:
+		if(bonus_vida !=  true){
+			qtd_bonus_ativos++;
+		}
+		bonus_vida = true;
 		jogador.vida++;
 		audioLife = true;
 		printf("Uma vida a mais, Vidas: %d", jogador.vida);
 		break;
 	case 3:
+		if(bonus_estrela !=  true){
+			qtd_bonus_ativos++;
+		}
+		bonus_estrela = true;
 		jogador.velocidade += 0.1;
 		jogador.projetil.velocidade += 0.2;
 		velocidade_bonus = jogador.velocidade;
 		printf("Velocidade de movimento e de projetil aumentadas!\nVelocidade de movimento: %f\nVelocidade de projetil: %f", jogador.velocidade, jogador.projetil.velocidade);
 		break;
 	case 4:
+		if(bonus_boat !=  true){
+			qtd_bonus_ativos++;
+		}
 		bonus_boat = true;
 		printf("Agora e permitido andar sobre a água!\n");
 		break;
 	case 5:
+		if(bonus_gun !=  true){
+			qtd_bonus_ativos++;
+		}
 		bonus_gun = true;
 		printf("Agora e permitido quebrar metal!\n");
 		break;

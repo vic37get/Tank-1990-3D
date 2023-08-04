@@ -1,59 +1,103 @@
 #ifndef TEXTOS_H
 #define TEXTOS_H
+#include "mapa.h"
 
 
 void desenhaVidasJogador(int vidas){
 	char texto1[19] = "Vidas do Jogador: ";
-    stringstream ss;
-    ss<<vidas;
-    string str = ss.str();
-    int i = 0;
-    glDisable(GL_TEXTURE_2D);
-    GLfloat w = 1.0, h = 1.0, x = 0, y = 0;
     glPushMatrix();
-    	glTranslatef(15.6, -5, 0);
+    	glTranslatef(15.6, -6, 0);
     	glColor3f(1.0, 1.0, 1.0);
     	glRasterPos2f(0.0,15);
-    	for(i = 0; i<=static_cast<int>(strlen(texto1)); i++){
+    	for(int i = 0; i<=static_cast<int>(strlen(texto1)); i++){
     		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,texto1[i]);
 		}
     glPopMatrix();
     
     glPushMatrix();
-    	glColor3f(0.0, 1.0, 0.0);
-		glTranslatef(15.5, 3.0, 0.5);
-		for (int i = 0; i < vidas; i++){
-			blocoVida(5, i, x, y, h, w);
-		}
-    glPopMatrix();
-    glEnable(GL_TEXTURE_2D);
+    glTranslatef(15.5, 7.0, 0.5);
+    glScalef(0.8, 0.8, 0.8);
+    float espaco = 1.5;
+
+    for (int i = 0; i < vidas; i++){
+        glPushMatrix();
+        glTranslatef(i * espaco, 0.0, 0.0);
+        desenhaTank(0.0, 0.0, 180, 1.0, 1.0, 0.0);
+        glPopMatrix();
+    }
+
+glPopMatrix();
 }
 
 void desenhaVidasInimigo(int vidas){
-	char texto[25] = "Vidas dos Inimigos: ";
-    stringstream ss;
-    ss<<vidas;
-    string str = ss.str();
-    int i = 0;
-	glDisable(GL_TEXTURE_2D);
-	GLfloat w = 1.0, h = 1.0, x = 0, y = 0;
+	char texto[25] = "Inimigos: ";
 	glPushMatrix();
 		glTranslatef(16, -2, 0);
 		glColor3f(1.0, 1.0, 1.0);
 		glRasterPos2f(0.0,15);
-		for(i = 0; i<=static_cast<int>(strlen(texto)); i++){
+		for(int i = 0; i<=static_cast<int>(strlen(texto)); i++){
     		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,texto[i]);
 		}
 	glPopMatrix();
 	
 	glPushMatrix();
-		glColor3f(1.0, 0.0, 0.0);
-		glTranslatef(15.8, 5.8, 0.5);
+		glTranslatef(15.8, 10.5, 0.5);
+		glScalef(0.8, 0.8, 0.8);
+		float espaco = 1.5;
 		for (int i = 0; i < vidas; i++){
-			blocoVida(5, i, x, y, h, w);
+        	glPushMatrix();
+        	glTranslatef(i * espaco, 0.0, 0.0);
+        	desenhaTank(0.0, 0.0, 180, 1.0, 0.0, 0.0);
+        	glPopMatrix();
+    	}
+    glPopMatrix();
+}
+
+void desenhaPlacarBonus(){
+	char texto[25] = "Bonus Ativos:";
+	glPushMatrix();
+		glTranslatef(15.5, -9.5, 0);
+		glColor3f(1.0, 1.0, 1.0);
+		glRasterPos2f(0.0,15);
+		for(int i = 0; i<=static_cast<int>(strlen(texto)); i++){
+    		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,texto[i]);
 		}
     glPopMatrix();
-    glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+		glTranslatef(15.4, 4.0, 0.5);
+		glScalef(0.8, 0.8, 0.8);
+		float espaco = 1.5;
+		if (bonus_wall){
+			glPushMatrix();
+			   	glTranslatef(0 * espaco, 0.0, 0.0);
+			   	desenhaBonus(1, 0, 0, 0);
+			glPopMatrix();
+		}
+		if (bonus_vida){
+			glPushMatrix();
+			   	glTranslatef(1 * espaco, 0.0, 0.0);
+			   	desenhaBonus(2, 0, 0, 0);
+			glPopMatrix();
+		}
+		if (bonus_estrela){
+			glPushMatrix();
+				glTranslatef(2 * espaco, 0.0, 0.0);
+			   	desenhaBonus(3, 0, 0, 0);
+			glPopMatrix();
+		}
+		if (bonus_boat){
+			glPushMatrix();
+				glTranslatef(3 * espaco, 0.0, 0.0);
+				desenhaBonus(4, 0, 0, 0);
+			glPopMatrix();
+		}
+		if (bonus_gun){
+			glPushMatrix();
+				glTranslatef(4 * espaco, 0.0, 0.0);
+				desenhaBonus(5, 0, 0, 0);
+			glPopMatrix();
+		}
+	glPopMatrix();
 }
 
 #endif
