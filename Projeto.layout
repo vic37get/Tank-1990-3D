@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout>
 	<Files>
-		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="656">
-			<Cursor Line="678" Column="15"/>
+		<File Name="main.cpp" Top="No" Tabpos="1" TopLine="73">
+			<Cursor Line="101" Column="30"/>
 		</File>
-		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="282">
-			<Cursor Line="293" Column="5"/>
+		<File Name="mapa.h" Top="No" Tabpos="2" TopLine="198">
+			<Cursor Line="210" Column="32"/>
 		</File>
-		<File Name="textos.h" Top="No" Tabpos="4" TopLine="32">
-			<Cursor Line="56" Column="29"/>
+		<File Name="bonus.h" Top="No" Tabpos="3" TopLine="1">
+			<Cursor Line="8" Column="1"/>
+		</File>
+		<File Name="projetil.h" Top="No" Tabpos="4" TopLine="1">
+			<Cursor Line="9" Column="26"/>
+		</File>
+		<File Name="bloco.h" Top="No" Tabpos="5" TopLine="113">
+			<Cursor Line="132" Column="50"/>
+		</File>
+		<File Name="texturaMenu.h" Top="No" Tabpos="6" TopLine="1">
+			<Cursor Line="9" Column="7"/>
+		</File>
+		<File Name="texturaBonusBoat.h" Top="Yes" Tabpos="7" TopLine="1">
+			<Cursor Line="9" Column="7"/>
 		</File>
 	</Files>
 </Layout>

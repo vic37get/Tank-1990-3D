@@ -38,6 +38,8 @@ int h, w = 0;
 bool game_win = false;
 bool game_over = false;
 
+bool menu_inicial = false;
+
 //Bonus
 bool bonus_ativo = false;
 int posicaoBonus, tipo_bonus;
@@ -89,27 +91,31 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    playAudio();
-    background();
-    criaMapa(jogador, inimigo1, inimigo2, inimigo3);
-    desenhaVidasJogador(jogador.vida);
-    desenhaVidasInimigo(vidas_inimigos);
-    desenhaPlacarBonus();
-    
-    if(jogador.projetil.tiro && (game_over == false && game_win == false)){
-		desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
+    if (menu_inicial){
+	    playAudio();
+	    background();
+	    criaMapa(jogador, inimigo1, inimigo2, inimigo3);
+	    desenhaVidasJogador(jogador.vida);
+	    desenhaVidasInimigo(vidas_inimigos);
+	    desenhaPlacarBonus();
+	    if(jogador.projetil.tiro && (game_over == false && game_win == false)){
+			desenhaProjetil(jogador.projetil.xOrigem, jogador.projetil.yOrigem, jogador.projetil.direcao);
+		}
+		if(inimigo1.projetil.tiro){
+			desenhaProjetil(inimigo1.projetil.xOrigem, inimigo1.projetil.yOrigem, inimigo1.projetil.direcao);
+		}
+		if(inimigo2.projetil.tiro){
+			desenhaProjetil(inimigo2.projetil.xOrigem, inimigo2.projetil.yOrigem, inimigo2.projetil.direcao);
+		}
+		if(inimigo3.projetil.tiro){
+			desenhaProjetil(inimigo3.projetil.xOrigem, inimigo3.projetil.yOrigem, inimigo3.projetil.direcao);
+		}
+		if(bonus_ativo == true){
+			bonus();
+		}
 	}
-	if(inimigo1.projetil.tiro){
-		desenhaProjetil(inimigo1.projetil.xOrigem, inimigo1.projetil.yOrigem, inimigo1.projetil.direcao);
-	}
-	if(inimigo2.projetil.tiro){
-		desenhaProjetil(inimigo2.projetil.xOrigem, inimigo2.projetil.yOrigem, inimigo2.projetil.direcao);
-	}
-	if(inimigo3.projetil.tiro){
-		desenhaProjetil(inimigo3.projetil.xOrigem, inimigo3.projetil.yOrigem, inimigo3.projetil.direcao);
-	}
-	if(bonus_ativo == true){
-		bonus();
+	else{
+		menuInicial();
 	}
     glutSwapBuffers();
 }
@@ -140,6 +146,8 @@ void keyboard (unsigned char key, int x, int y){
 				}
 			}
 			break;
+		case 'v':
+			menu_inicial = true;
 		default:
 			break;
 	}
@@ -517,26 +525,28 @@ void sorteiaMovimento(int value){
 }
 
 void esperaMovimento(int value){
-	movimentaInimigo(&inimigo1, mov_inimigo1);
-	if (inimigo1.projetil.tiro != true && inimigo1.vivo == true){
-		inimigo1.projetil.tiro = true;
-		inimigo1.projetil.xOrigem = inimigo1.x;
-		inimigo1.projetil.yOrigem = inimigo1.y;
-		inimigo1.projetil.direcao = inimigo1.direcaoCano;
-	}
-	movimentaInimigo(&inimigo2, mov_inimigo2);
-	if (inimigo2.projetil.tiro != true && inimigo2.vivo == true){
-		inimigo2.projetil.tiro = true;
-		inimigo2.projetil.xOrigem = inimigo2.x;
-		inimigo2.projetil.yOrigem = inimigo2.y;
-		inimigo2.projetil.direcao = inimigo2.direcaoCano;
-	}
-	movimentaInimigo(&inimigo3, mov_inimigo3);
-	if (inimigo3.projetil.tiro != true && inimigo3.vivo == true){
-		inimigo3.projetil.tiro = true;
-		inimigo3.projetil.xOrigem = inimigo3.x;
-		inimigo3.projetil.yOrigem = inimigo3.y;
-		inimigo3.projetil.direcao = inimigo3.direcaoCano;
+	if (menu_inicial){
+		movimentaInimigo(&inimigo1, mov_inimigo1);
+		if (inimigo1.projetil.tiro != true && inimigo1.vivo == true){
+			inimigo1.projetil.tiro = true;
+			inimigo1.projetil.xOrigem = inimigo1.x;
+			inimigo1.projetil.yOrigem = inimigo1.y;
+			inimigo1.projetil.direcao = inimigo1.direcaoCano;
+		}
+		movimentaInimigo(&inimigo2, mov_inimigo2);
+		if (inimigo2.projetil.tiro != true && inimigo2.vivo == true){
+			inimigo2.projetil.tiro = true;
+			inimigo2.projetil.xOrigem = inimigo2.x;
+			inimigo2.projetil.yOrigem = inimigo2.y;
+			inimigo2.projetil.direcao = inimigo2.direcaoCano;
+		}
+		movimentaInimigo(&inimigo3, mov_inimigo3);
+		if (inimigo3.projetil.tiro != true && inimigo3.vivo == true){
+			inimigo3.projetil.tiro = true;
+			inimigo3.projetil.xOrigem = inimigo3.x;
+			inimigo3.projetil.yOrigem = inimigo3.y;
+			inimigo3.projetil.direcao = inimigo3.direcaoCano;
+		}
 	}
 	glutPostRedisplay();
 	glutTimerFunc(16, esperaMovimento, 0);

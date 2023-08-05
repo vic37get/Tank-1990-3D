@@ -33,16 +33,17 @@ using std::string;
 #include "texturas/texturaBonusBoat.h"
 #include "texturas/texturaTank.h"
 #include "texturas/texturaFundo.h"
+#include "texturaMenu.h"
 
 
 
 #define tamMapa 15
 
 //Texturas
-#define QUANT_TEX 14
+#define QUANT_TEX 16
 int coluna = 0;
 float tam_tank = 0.8;
-unsigned int id_texturas[15]; //nomes identificadores de textura
+unsigned int id_texturas[QUANT_TEX]; //nomes identificadores de textura
 
 void textura(){
 	
@@ -130,6 +131,11 @@ void textura(){
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
+  glBindTexture(GL_TEXTURE_2D, id_texturas[15]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_menu, TEXTURE_menu, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_menu_data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   glEnable(GL_TEXTURE_2D);
 }
@@ -204,6 +210,27 @@ void background() {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void menuInicial(){
+	glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+    	glLoadIdentity();
+		glDisable(GL_DEPTH_TEST);
+ 		glDisable(GL_LIGHTING);
+    	glDepthMask(GL_FALSE);
+    	glBindTexture(GL_TEXTURE_2D, id_texturas[15]);
+    	glBegin(GL_QUADS);
+	    glColor3f(1.0, 1.0, 1.0);
+	    glTexCoord2i(0, 0); glVertex2i(-1, -1);
+	    glTexCoord2i(1, 0); glVertex2i(1, -1);
+	    glTexCoord2i(1, 1); glVertex2i(1, 1);
+	    glTexCoord2i(0, 1); glVertex2i(-1, 1);
+	    glEnd();
+	    glEnable(GL_DEPTH_TEST);
+	    glEnable(GL_LIGHTING);
+	    glDepthMask(GL_TRUE);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
 
 
 

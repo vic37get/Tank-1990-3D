@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Carregue a imagem
-caminho_da_imagem = 'texturas\\Img\\background.jpg'
+caminho_da_imagem = 'texturas\\Img\\menu.png'
 imagem = cv2.imread(caminho_da_imagem)
 imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
 
