@@ -5,6 +5,8 @@
 
 bool startGame = false;
 bool gameOverAudio = false;
+bool gameWinAudio = false;
+bool gameMenuAudio = true;
 bool explosion = false;
 bool atiraAudio = false;
 bool audioLife = false;
@@ -52,6 +54,30 @@ void playAudio(){
 	if(atiraAudio){
 		mciSendString("play sounds/fire.wav", NULL, 0, NULL);
 		atiraAudio = false;
+	}
+}
+
+void playGameOverAudio(){
+	if(gameOverAudio){
+		mciSendString("play sounds/gameover.wav", NULL, 0, NULL);
+		gameOverAudio = false;
+	}
+}
+
+void playGameWinAudio(){
+	if(gameWinAudio){
+		mciSendString("play sounds/gamewin.wav", NULL, 0, NULL);
+		gameWinAudio = false;
+	}
+}
+
+void playMenuAudio(){
+	if(gameMenuAudio){
+		mciSendString("play sounds/gamemenu.wav", NULL, 0, NULL);
+		gameMenuAudio = false;
+	}else {
+		mciSendString("stop sounds/gamemenu.wav", NULL, 0, NULL);
+ 		mciSendString("close sounds/gamemenu.wav", NULL, 0, NULL);
 	}
 }
 
