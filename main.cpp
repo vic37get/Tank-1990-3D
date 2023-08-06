@@ -37,8 +37,10 @@ int h, w = 0;
 //Partida
 bool game_win = false;
 bool game_over = false;
-
-bool menu_inicial = false;
+bool menu_inicial = true;
+static int game_over_execucao = 0;
+static int game_win_execucao = 0;
+static int game_menu_execucao = 0;
 
 //Bonus
 bool bonus_ativo = false;
@@ -91,8 +93,9 @@ void init(void){
 void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpa o Buffer de Cores
     glLoadIdentity();
-    if (menu_inicial){
-	    playAudio();
+    if (menu_inicial == false && game_over == false && game_win == false){
+	    playMenuAudio();
+		playAudio();
 	    background();
 	    criaMapa(jogador, inimigo1, inimigo2, inimigo3);
 	    desenhaVidasJogador(jogador.vida);
@@ -114,8 +117,27 @@ void display(){
 			bonus();
 		}
 	}
-	else{
-		menuInicial();
+	else if (menu_inicial){
+		game_menu_execucao++;
+		if(game_menu_execucao == 1){
+			playMenuAudio();
+		}
+		menu(15);
+	} 
+	else if(game_over){
+		game_over_execucao++;
+		if(game_over_execucao == 1){
+			playGameOverAudio();
+		}
+		menu(16);
+	}
+	else if(game_win){
+		game_win_execucao++;
+		gameWinAudio = true;
+		if(game_win_execucao == 1){
+			playGameWinAudio();
+		}
+		menu(17);
 	}
     glutSwapBuffers();
 }
@@ -146,8 +168,18 @@ void keyboard (unsigned char key, int x, int y){
 				}
 			}
 			break;
-		case 'v':
-			menu_inicial = true;
+		case 13:
+			if(menu_inicial){
+				menu_inicial = false;
+			} else if(game_over){
+				game_over = false;
+			}
+			
+		case 27:
+			if(menu_inicial || game_over || game_win){
+				exit(EXIT_SUCCESS); 
+			}
+			break;
 		default:
 			break;
 	}
@@ -525,7 +557,7 @@ void sorteiaMovimento(int value){
 }
 
 void esperaMovimento(int value){
-	if (menu_inicial){
+	if (menu_inicial == false){
 		movimentaInimigo(&inimigo1, mov_inimigo1);
 		if (inimigo1.projetil.tiro != true && inimigo1.vivo == true){
 			inimigo1.projetil.tiro = true;
@@ -587,11 +619,7 @@ void verificaStatus(int value){
 	//Verifica se ocorreu game over ou vitória.
 	if(jogador.vivo && (inimigo1.vivo == false && inimigo2.vivo == false && inimigo3.vivo == false)){
 		game_win = true;
-		printf("VITORIA!\n");
 	}
-	else if(game_over){
-		printf("GAME OVER!\n");
-	} 
 	glutPostRedisplay();
 	glutTimerFunc(16, verificaStatus, 0);
 }

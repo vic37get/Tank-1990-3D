@@ -33,111 +33,124 @@ using std::string;
 #include "texturas/texturaBonusBoat.h"
 #include "texturas/texturaTank.h"
 #include "texturas/texturaFundo.h"
-#include "texturaMenu.h"
-
-
+#include "texturas/texturaMenu.h"
+#include "texturas/texturaGameOver.h"
+#include "texturas/texturaGameWin.h"
 
 #define tamMapa 15
 
 //Texturas
-#define QUANT_TEX 16
+#define QUANT_TEX 18
 int coluna = 0;
 float tam_tank = 0.8;
 unsigned int id_texturas[QUANT_TEX]; //nomes identificadores de textura
 
 void textura(){
-	
 	/* Prepara a textura */
-  glGenTextures(QUANT_TEX, id_texturas); //gera nomes identificadores de texturas
+	glGenTextures(QUANT_TEX, id_texturas); //gera nomes identificadores de texturas
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[0]); //Textura tijolo
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_tijolo, TEXTURE_tijolo, 0, GL_RGB, GL_UNSIGNED_BYTE, tijolo_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[1]); //Textura agua
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_agua, TEXTURE_agua, 0, GL_RGB, GL_UNSIGNED_BYTE, agua_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[2]); //Textura metal
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_metal, TEXTURE_metal, 0, GL_RGB, GL_UNSIGNED_BYTE, metal_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[3]); //Textura gelo
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_gelo, TEXTURE_gelo, 0, GL_RGB, GL_UNSIGNED_BYTE, gelo_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[4]); //Textura arbusto
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_arbusto, TEXTURE_arbusto, 0, GL_RGB, GL_UNSIGNED_BYTE, arbusto_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[5]); //Textura parede
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_parede, TEXTURE_parede, 0, GL_RGB, GL_UNSIGNED_BYTE, parede_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[6]); 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_chao, TEXTURE_chao, 0, GL_RGB, GL_UNSIGNED_BYTE, chao_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[7]); 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_aguia, TEXTURE_aguia, 0, GL_RGB, GL_UNSIGNED_BYTE, aguia_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	
+	//Texturas dos bonus
+	glBindTexture(GL_TEXTURE_2D, id_texturas[8]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_gun, TEXTURE_bonus_gun, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_gun_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[9]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_stone, TEXTURE_bonus_stone, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_stone_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[10]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_life, TEXTURE_bonus_life, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_life_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[11]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_speed, TEXTURE_bonus_speed, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_speed_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glBindTexture(GL_TEXTURE_2D, id_texturas[12]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_boat, TEXTURE_bonus_boat, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_boat_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	
+	//Textura do Tank
+	glBindTexture(GL_TEXTURE_2D, id_texturas[13]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_tank, TEXTURE_tank, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_tank_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	
+	//Textura do Background
+	glBindTexture(GL_TEXTURE_2D, id_texturas[14]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_fundo, TEXTURE_fundo, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_fundo_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	
+	//Textura do Menu
+	glBindTexture(GL_TEXTURE_2D, id_texturas[15]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_menu, TEXTURE_menu, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_menu_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
-  glBindTexture(GL_TEXTURE_2D, id_texturas[0]); //Textura tijolo
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_tijolo, TEXTURE_tijolo, 0, GL_RGB, GL_UNSIGNED_BYTE, tijolo_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//Textura de Game Over
+	glBindTexture(GL_TEXTURE_2D, id_texturas[16]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_gameover, TEXTURE_gameover, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_gameover_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	//Textura de Game Win
+	glBindTexture(GL_TEXTURE_2D, id_texturas[17]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_gamewin, TEXTURE_gamewin, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_gamewin_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   
-  glBindTexture(GL_TEXTURE_2D, id_texturas[1]); //Textura agua
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_agua, TEXTURE_agua, 0, GL_RGB, GL_UNSIGNED_BYTE, agua_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[2]); //Textura metal
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_metal, TEXTURE_metal, 0, GL_RGB, GL_UNSIGNED_BYTE, metal_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[3]); //Textura gelo
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_gelo, TEXTURE_gelo, 0, GL_RGB, GL_UNSIGNED_BYTE, gelo_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[4]); //Textura arbusto
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_arbusto, TEXTURE_arbusto, 0, GL_RGB, GL_UNSIGNED_BYTE, arbusto_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[5]); //Textura parede
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_parede, TEXTURE_parede, 0, GL_RGB, GL_UNSIGNED_BYTE, parede_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[6]); 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_chao, TEXTURE_chao, 0, GL_RGB, GL_UNSIGNED_BYTE, chao_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[7]); 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_aguia, TEXTURE_aguia, 0, GL_RGB, GL_UNSIGNED_BYTE, aguia_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    
-  
-  //Texturas dos bonus
-  glBindTexture(GL_TEXTURE_2D, id_texturas[8]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_gun, TEXTURE_bonus_gun, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_gun_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[9]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_stone, TEXTURE_bonus_stone, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_stone_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[10]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_life, TEXTURE_bonus_life, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_life_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[11]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_speed, TEXTURE_bonus_speed, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_speed_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[12]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_bonus_boat, TEXTURE_bonus_boat, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_bonus_boat_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  
-  //Textura do Tank
-  glBindTexture(GL_TEXTURE_2D, id_texturas[13]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_tank, TEXTURE_tank, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_tank_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  
-  //Textura do Background
-  glBindTexture(GL_TEXTURE_2D, id_texturas[14]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_fundo, TEXTURE_fundo, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_fundo_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glBindTexture(GL_TEXTURE_2D, id_texturas[15]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXTURE_menu, TEXTURE_menu, 0, GL_RGB, GL_UNSIGNED_BYTE, textura_menu_data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-  glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glEnable(GL_TEXTURE_2D);
 }
 
 /*
@@ -210,14 +223,17 @@ void background() {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void menuInicial(){
+/*
+Menu Inicial, Menu Game Over e Menu Win
+*/
+void menu(int id){
 	glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
     	glLoadIdentity();
 		glDisable(GL_DEPTH_TEST);
  		glDisable(GL_LIGHTING);
     	glDepthMask(GL_FALSE);
-    	glBindTexture(GL_TEXTURE_2D, id_texturas[15]);
+    	glBindTexture(GL_TEXTURE_2D, id_texturas[id]);
     	glBegin(GL_QUADS);
 	    glColor3f(1.0, 1.0, 1.0);
 	    glTexCoord2i(0, 0); glVertex2i(-1, -1);
@@ -231,7 +247,6 @@ void menuInicial(){
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
-
 
 
 void desenhaBonus(int tipo_bonus, float i, float j, int rotacao){
@@ -273,7 +288,7 @@ void desenhaTank(float i, float j, int direcao, int R, int G, int B){
 		glBindTexture(GL_TEXTURE_2D, id_texturas[13]);
 		glColor3f(R, G, B);
 		glTranslatef (j*1, i*1, 0.5);
-		glScalef (tam_tank, tam_tank, 0.5);
+		glScalef (tam_tank, tam_tank, tam_tank);
 		draw_object_smooth();
 		glRotatef(direcao, 0.0 , 0.0 , 1.0);
 		glDisable(GL_TEXTURE_2D);
