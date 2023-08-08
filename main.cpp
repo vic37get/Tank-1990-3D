@@ -38,6 +38,7 @@ int h, w = 0;
 bool game_win = false;
 bool game_over = false;
 bool menu_inicial = true;
+
 static int game_over_execucao = 0;
 static int game_win_execucao = 0;
 static int game_menu_execucao = 0;
@@ -616,7 +617,7 @@ void specialKeyboard(int key, int x, int y){
 }
 
 void verificaStatus(int value){
-	//Verifica se ocorreu game over ou vitória.
+	//Verifica se ocorreu vitória.
 	if(jogador.vivo && (inimigo1.vivo == false && inimigo2.vivo == false && inimigo3.vivo == false)){
 		game_win = true;
 	}
